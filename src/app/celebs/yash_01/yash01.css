@@ -361,6 +361,14 @@
   border-radius: 50%;
   pointer-events: none;
   filter: blur(60px);
+  /*
+   * These two are the only elements on the page that are both heavily blurred
+   * and moved every frame. Promoting them bakes the blur into a composited
+   * layer once, so the scroll transform is a cheap re-composite instead of a
+   * re-blur of a 26rem surface. Deliberately limited to these two — the
+   * gallery plates move too, but they are unblurred and do not need it.
+   */
+  will-change: transform;
 }
 .y01 .hero__glow--a {
   width: 26rem;
