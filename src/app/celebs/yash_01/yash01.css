@@ -212,13 +212,40 @@
  * the element in from somewhere it never was.
  */
 .y01 .lit {
-  opacity: 0.4;
-  filter: saturate(0.25) brightness(0.72);
   transition:
     opacity 0.75s var(--ease-out),
     filter 0.75s var(--ease-out),
     transform 0.75s var(--ease-out);
 }
+
+/*
+ * The unlit state exists only where scripting can end it. `scripting: enabled`
+ * is the media feature for precisely this, so no flag script is needed and
+ * there is nothing for React to disagree with at hydration. A browser that
+ * does not support the feature simply fails to match, landing on the same safe
+ * full-strength render a no-JS visitor gets.
+ *
+ * Measured on --txt-dim over --ink-900: the previous 0.4 + brightness(0.72)
+ * resolved to 1.67:1 — under the 4.5:1 floor this project holds itself to, and
+ * that was also what a no-JS visitor got permanently. This pair measures
+ * 5.1:1 while still unlit, so the reveal never trades legibility for effect.
+ */
+@media (scripting: enabled) {
+  .y01 .lit {
+    opacity: 0.78;
+    filter: saturate(0.4) brightness(0.95);
+  }
+
+  /*
+   * Display type holds a deeper unlit state than body copy: it is large, so
+   * the 3:1 threshold applies, and the neon measures 3.9:1 at its dimmest.
+   */
+  .y01 .tube {
+    opacity: 0.45;
+    filter: saturate(0.3) brightness(0.8);
+  }
+}
+
 .y01 .lit[data-lit="true"] {
   opacity: 1;
   filter: none;
