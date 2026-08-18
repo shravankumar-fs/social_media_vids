@@ -1,32 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback } from "react";
 import { identity } from "@/data/yash";
 import { useParallax, usePointerTilt } from "@/lib/scroll";
 import { useReveal } from "@/lib/reveal";
 
 export default function Hero() {
-  const tilt = usePointerTilt(1);
-  const parallax = useParallax<HTMLElement>(1);
+  /*
+   * Two custom-property writers, one per element rather than one merged ref:
+   * the tilt writes --tx/--ty on the header, and every layer below inherits
+   * them; the parallax writes --p on the stage, which is the only subtree that
+   * reads it. Sharing a single element would mean assigning to a ref a hook
+   * returned, which React 19 does not allow.
+   */
+  const { ref: shell } = usePointerTilt(1);
+  const stage = useParallax<HTMLDivElement>(1);
   const reveal = useReveal<HTMLDivElement>(0.1);
 
-  /*
-   * Both hooks write custom properties onto the same element — the tilt writes
-   * --tx/--ty, the parallax writes --p — and every layer below inherits them.
-   * One element, so one merged ref rather than a wrapper div per hook.
-   */
-  const stageRef = useCallback(
-    (el: HTMLElement | null) => {
-      tilt.ref.current = el;
-      parallax.current = el;
-    },
-    [tilt.ref, parallax],
-  );
-
   return (
-    <header className="hero grain" ref={stageRef}>
-      <div className="hero__stage" aria-hidden="true">
+    <header className="hero grain" ref={shell}>
+      <div className="hero__stage" ref={stage} aria-hidden="true">
         <div className="hero__glow hero__glow--a" />
         <div className="hero__glow hero__glow--b" />
         <div className="hero__portrait">
@@ -40,11 +33,9 @@ export default function Hero() {
           />
         </div>
         <div className="hero__horizon" />
+        {/* Inside the stage because it is a depth layer and reads --p. */}
+        <p className="hero__mark">{identity.kannadaName}</p>
       </div>
-
-      <p className="hero__mark" aria-hidden="true">
-        {identity.kannadaName}
-      </p>
 
       <div className="hero__inner shell" ref={reveal}>
         <p className="eyebrow lit">{identity.industry}</p>
