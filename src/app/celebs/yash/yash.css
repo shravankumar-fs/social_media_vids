@@ -1,0 +1,1473 @@
+/* ===========================================================================
+   /celebs/yash — the wall
+   Mobile-first throughout: every base rule is the phone, and the breakpoints
+   only ever add. Nothing here is a shrunk desktop.
+   =========================================================================== */
+
+.wall {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+}
+
+/* --------------------------------------------------------------- shared type */
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 8.5vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--color-gesso);
+  text-shadow:
+    0 1px 0 rgba(8, 10, 7, 0.9),
+    0 3px 10px rgba(8, 10, 7, 0.55);
+}
+
+.section-lede {
+  margin-top: 1.1rem;
+  max-width: 46ch;
+  font-size: 1.0625rem;
+  line-height: 1.66;
+  color: var(--color-stone-300);
+}
+
+@media (min-width: 64rem) {
+  .section-title {
+    font-size: clamp(2.75rem, 4.6vw, 4.5rem);
+  }
+  .section-lede {
+    font-size: 1.1875rem;
+  }
+}
+
+/* =================================================================== 1. NICHE */
+
+.niche {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      118% 74% at 50% 6%,
+      var(--color-stone-700) 0%,
+      var(--color-stone-850) 46%,
+      var(--color-stone-950) 100%
+    );
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/*
+ * The inscription needs a wall to sit on, not a face. On a phone the niche
+ * takes the top and this scrim beds the lettering into the plinth below it;
+ * on a wide screen the niche moves right and the scrim sweeps from the left.
+ */
+.niche::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    var(--color-stone-950) 4%,
+    rgba(14, 18, 12, 0.92) 26%,
+    rgba(14, 18, 12, 0.6) 42%,
+    transparent 62%
+  );
+}
+
+/* The CSS carving: what every device gets, canvas or no canvas. */
+.niche__still {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: start center;
+  padding-top: 4svh;
+  transition: opacity 1.2s var(--ease-leaf);
+}
+.niche__still[aria-hidden="true"] {
+  opacity: 0;
+}
+
+.niche__opening {
+  position: relative;
+  width: min(64vw, 17rem);
+  aspect-ratio: 0.68;
+  /* A five-cusped Chalukyan arch, the same profile the WebGL wall cuts. */
+  clip-path: polygon(
+    0% 100%, 0% 46%, 3% 38%, 8% 33%, 13% 36%, 17% 32%,
+    22% 24%, 28% 19%, 34% 22%, 39% 17%, 45% 13%, 50% 12%,
+    55% 13%, 61% 17%, 66% 22%, 72% 19%, 78% 24%, 83% 32%,
+    87% 36%, 92% 33%, 97% 38%, 100% 46%, 100% 100%
+  );
+  background: var(--color-stone-950);
+  filter: drop-shadow(0 24px 60px rgba(8, 10, 7, 0.9));
+  transform: translate3d(
+    calc(var(--tx, 0) * -0.9rem),
+    calc(var(--ty, 0) * -0.55rem),
+    0
+  );
+}
+
+.niche__photo {
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: saturate(0.82) contrast(1.06) brightness(0.92);
+}
+
+.niche__canvas {
+  position: absolute;
+  inset: 0;
+  animation: fade-canvas 1.4s var(--ease-leaf) both;
+}
+@keyframes fade-canvas {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.niche__type {
+  position: relative;
+  z-index: 2;
+  grid-row: 1 / -1;
+  align-self: end;
+  padding: 0 var(--gutter) 3.5rem;
+  transform: translate3d(
+    calc(var(--tx, 0) * 0.42rem),
+    calc(var(--ty, 0) * 0.26rem),
+    0
+  );
+}
+
+.niche__above {
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  color: var(--color-leaf-300);
+  margin-bottom: 0.35rem;
+}
+
+/*
+ * Gilded gesso lettering. Two stacked layers: a raised chalk ground that
+ * carries the relief edge, and the leaf laid over it. This is the material
+ * the world is made of, not a gradient standing in for emphasis.
+ */
+.niche__name {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3.75rem, 21vw, 7rem);
+  line-height: 0.86;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+/*
+ * The focal moment. The name exists first as raised chalk gesso, and the leaf
+ * is laid across the letterforms in one pass — the gesso yielding to the gold
+ * as it arrives, exactly the order the craft works in. It happens once.
+ */
+.niche__name-leaf::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: var(--color-gesso);
+  transform: translate3d(0, 2px, 0);
+  filter: blur(0.5px);
+  opacity: 0.55;
+  animation: gesso-yield 1.5s var(--ease-leaf) 0.3s both;
+}
+.niche__name-leaf {
+  display: block;
+  position: relative;
+  background-image: linear-gradient(
+    100deg,
+    var(--color-leaf-700) 0%,
+    var(--color-leaf-300) 12%,
+    var(--color-leaf-050) 23%,
+    var(--color-leaf-400) 36%,
+    var(--color-leaf-600) 47%,
+    var(--color-leaf-100) 62%,
+    var(--color-leaf-200) 74%,
+    var(--color-leaf-500) 87%,
+    var(--color-leaf-700) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 50% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 1px rgba(8, 10, 7, 0.95))
+    drop-shadow(0 10px 22px rgba(8, 10, 7, 0.6));
+  animation:
+    name-gild 1.5s var(--ease-leaf) 0.3s both,
+    name-burnish 15s ease-in-out 1.9s infinite;
+}
+
+@keyframes name-gild {
+  from {
+    background-position: 122% 0;
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+  }
+  to {
+    background-position: 50% 0;
+    opacity: 1;
+  }
+}
+
+/* The chalk is strongest before the leaf reaches it, then sits back under. */
+@keyframes gesso-yield {
+  from {
+    opacity: 0.92;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+/* Ambient only: enough to keep the leaf from reading as flat paint. */
+@keyframes name-burnish {
+  0%,
+  100% {
+    background-position: 50% 0;
+  }
+  50% {
+    background-position: 63% 0;
+  }
+}
+
+.niche__epithet {
+  margin-top: 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.8125rem, 3.4vw, 1.0625rem);
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-stone-300);
+}
+
+.niche__plinth {
+  margin: 1.75rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+  max-width: 34rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(148, 162, 134, 0.2);
+  box-shadow: 0 -1px 0 rgba(8, 10, 7, 0.9);
+}
+.niche__plinth > div {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+.niche__plinth dt {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-leaf-500);
+}
+.niche__plinth dd {
+  font-size: 0.9375rem;
+  color: var(--color-stone-200);
+}
+
+.niche__cue {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-stone-400);
+}
+.niche__cue svg {
+  animation: sink 2.9s var(--ease-carve) infinite;
+}
+@keyframes sink {
+  0%, 62%, 100% { transform: translateY(0); opacity: 0.45; }
+  30% { transform: translateY(5px); opacity: 1; }
+}
+
+/*
+ * The rest of the inscription follows the name rather than arriving with it,
+ * so the header reads as one sequence instead of four things fading at once.
+ */
+.niche__above { animation: arrive 0.9s var(--ease-carve) 0.15s both; }
+.niche__epithet { animation: arrive 0.9s var(--ease-carve) 1.15s both; }
+.niche__plinth { animation: arrive 0.9s var(--ease-carve) 1.4s both; }
+.niche__cue { animation: arrive 1.1s var(--ease-carve) 1.8s both; }
+
+@keyframes arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/*
+ * Ambient loops stop dead once the header leaves the screen. Neither of these
+ * is load-bearing, and animate.md is right that a loop nobody can see is debt.
+ */
+.niche:not([data-onscreen="true"]) .niche__name-leaf,
+.niche:not([data-onscreen="true"]) .niche__cue svg {
+  animation-play-state: paused;
+}
+
+@media (min-width: 48rem) {
+  .niche__type {
+    padding-bottom: 4.5rem;
+  }
+  .niche__plinth {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    max-width: 38rem;
+  }
+  .niche__plinth > div {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}
+
+/*
+ * Wide: the niche moves to the right of the wall and the inscription takes
+ * the left, which is what the 3D scene does too (offsetX = 21% of the frame).
+ * Nothing overlaps his face, and the width finally does some work.
+ */
+@media (min-width: 64rem) {
+  .niche::after {
+    background: linear-gradient(
+      100deg,
+      var(--color-stone-950) 12%,
+      rgba(14, 18, 12, 0.9) 34%,
+      rgba(14, 18, 12, 0.45) 50%,
+      transparent 66%
+    );
+  }
+  .niche__still {
+    place-items: center start;
+    padding: 0 0 0 calc(50% + 4vw);
+  }
+  .niche__opening {
+    width: min(30vw, 25rem);
+    aspect-ratio: 0.7;
+  }
+  .niche__type {
+    align-self: center;
+    width: min(52%, 40rem);
+    padding-bottom: 0;
+    padding-left: max(var(--gutter), 5vw);
+  }
+  .niche__name {
+    font-size: clamp(6rem, 9.5vw, 10rem);
+  }
+  .niche__plinth {
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+  }
+  /* The cue belongs under the inscription it is inviting you to leave, not
+     stranded in the gap between the two columns. */
+  .niche__cue {
+    align-items: flex-start;
+    padding-left: max(var(--gutter), 5vw);
+    padding-bottom: 2.25rem;
+  }
+}
+
+/* ================================================================== 2. FRIEZE */
+
+.frieze {
+  position: relative;
+  padding: var(--tier-gap) 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-stone-950),
+    var(--color-stone-900) 30%,
+    var(--color-stone-850)
+  );
+}
+
+.frieze__head {
+  padding: 0 var(--gutter);
+  margin-bottom: 2.75rem;
+}
+
+/*
+ * One course of stone, not five cards. The band carries the material and the
+ * gilded rule along its foot; the episodes inside it are separated by an
+ * incised groove, the way a frieze divides its scenes with a cut rather than
+ * with a frame around each one.
+ */
+.frieze__track {
+  position: relative;
+  display: grid;
+  background: linear-gradient(
+    172deg,
+    var(--color-stone-700) 0%,
+    var(--color-stone-800) 55%,
+    var(--color-stone-850) 100%
+  );
+  border-top: 1px solid rgba(192, 203, 180, 0.13);
+  box-shadow:
+    0 1px 0 rgba(8, 10, 7, 0.9),
+    0 14px 34px rgba(8, 10, 7, 0.5);
+}
+
+/* The gilded rule runs the length of the band, once. */
+.frieze__track::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--color-leaf-700),
+    var(--color-leaf-200) 18%,
+    var(--color-leaf-600) 42%,
+    var(--color-leaf-100) 64%,
+    var(--color-leaf-500) 86%,
+    var(--color-leaf-700)
+  );
+  opacity: 0.62;
+}
+
+.panel {
+  position: relative;
+  padding: 1.6rem var(--gutter) 1.9rem;
+}
+
+/* The cut between episodes: dark incision, lit lower lip. */
+.panel + .panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  height: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 10, 7, 0.95) 0 1px,
+    rgba(192, 203, 180, 0.14) 1px 2px
+  );
+}
+
+.panel__year {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--color-leaf-400);
+  margin-bottom: 0.55rem;
+}
+
+.panel__title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-gesso);
+  text-wrap: balance;
+}
+
+.panel__body {
+  margin-top: 0.7rem;
+  font-size: 0.9375rem;
+  line-height: 1.66;
+  color: var(--color-stone-300);
+}
+
+/* Chisel registration mark, cut at the foot of each episode. */
+.panel__rule {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 0.95rem;
+  width: 1.6rem;
+  height: 1px;
+  background: var(--color-leaf-600);
+  opacity: 0.8;
+}
+
+/* Wide screens get the real thing: a band that travels while the page falls. */
+@media (min-width: 64rem) {
+  .frieze {
+    height: 320svh;
+    padding: 0;
+  }
+  .frieze__sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3.5rem;
+    overflow: hidden;
+  }
+  .frieze__head {
+    padding: 0 var(--gutter);
+    margin-bottom: 0;
+    max-width: 52rem;
+  }
+  .frieze__track {
+    display: flex;
+    width: max-content;
+    /*
+     * Travel exactly the overhang and no further: (track width − viewport)
+     * plus a gutter at each end, so the first panel starts flush left and
+     * the last one lands flush right instead of running off into nothing.
+     */
+    transform: translate3d(
+      calc(var(--p, 0) * (100vw - 100% - var(--gutter) * 2)),
+      0,
+      0
+    );
+    will-change: transform;
+  }
+  .panel {
+    width: 24rem;
+    flex: 0 0 auto;
+    padding: 2.4rem 2.25rem 2.75rem;
+  }
+  /* Sideways band: the cut between episodes turns vertical with it. */
+  .panel + .panel::before {
+    top: 1.75rem;
+    bottom: 1.75rem;
+    left: 0;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(
+      to right,
+      rgba(8, 10, 7, 0.95) 0 1px,
+      rgba(192, 203, 180, 0.14) 1px 2px
+    );
+  }
+  .panel__rule {
+    left: 2.25rem;
+    bottom: 1.4rem;
+  }
+  .panel__title {
+    font-size: 1.75rem;
+  }
+}
+
+/*
+ * With motion off there is no scroll to drive the band sideways, so a pinned
+ * track would strand the last two episodes past the right edge with no way to
+ * reach them. The wide layout falls back to the phone's vertical course.
+ */
+@media (min-width: 64rem) and (prefers-reduced-motion: reduce) {
+  .frieze {
+    height: auto;
+    padding: var(--tier-gap) 0;
+  }
+  .frieze__sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    gap: 2.75rem;
+  }
+  .frieze__track {
+    display: grid;
+    width: auto;
+    transform: none;
+  }
+  .panel {
+    width: auto;
+    padding: 2rem var(--gutter) 2.25rem;
+  }
+  .panel + .panel::before {
+    top: 0;
+    bottom: auto;
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    height: 2px;
+    background: linear-gradient(
+      to bottom,
+      rgba(8, 10, 7, 0.95) 0 1px,
+      rgba(192, 203, 180, 0.14) 1px 2px
+    );
+  }
+  .panel__rule {
+    left: var(--gutter);
+    bottom: 0.95rem;
+  }
+}
+
+/* =================================================================== 3. TIERS */
+
+.tiers {
+  position: relative;
+  padding: var(--tier-gap) 0;
+  background: var(--color-stone-850);
+}
+
+.tiers__head {
+  padding: 0 var(--gutter);
+  margin-bottom: 3rem;
+}
+
+.tiers__stack {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.tier {
+  position: relative;
+  padding: 0 var(--gutter);
+}
+
+/*
+ * The gild band belongs on the stone, not on the wrapper that holds it. The
+ * wrapper carries the page gutter, and a sweep across that reads as a light
+ * leak over the background rather than leaf being laid on a course.
+ */
+.tier.gild::after {
+  left: var(--gutter);
+  right: var(--gutter);
+}
+
+.tier__stone {
+  position: relative;
+  overflow: hidden;
+  --pad-y: 1.35rem;
+  --pad-x: 1.3rem;
+  padding: var(--pad-y) var(--pad-x) calc(var(--pad-y) + 0.1rem);
+  background: linear-gradient(
+    to bottom,
+    var(--color-stone-700),
+    var(--color-stone-800)
+  );
+  border-top: 1px solid rgba(192, 203, 180, 0.1);
+  box-shadow:
+    0 1px 0 rgba(8, 10, 7, 0.85),
+    0 8px 20px rgba(8, 10, 7, 0.4);
+  transform: translate3d(0, calc(var(--pc, 0) * var(--depth, 1) * -0.9rem), 0);
+}
+
+.tier__year {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--color-stone-400);
+}
+
+.tier__title {
+  margin-top: 0.3rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.16;
+  color: var(--color-gesso);
+  text-wrap: balance;
+}
+
+.tier__note {
+  margin-top: 0.55rem;
+  max-width: 54ch;
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--color-stone-300);
+}
+
+.tier__figure {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.9rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.tier__figure-value {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--color-leaf-200);
+  text-shadow: 0 1px 3px rgba(8, 10, 7, 0.9);
+}
+.tier__figure-label {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-stone-400);
+}
+
+.tier__still {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  z-index: 0;
+  width: 38%;
+  max-width: 12rem;
+  overflow: hidden;
+  opacity: 0.26;
+  mask-image: linear-gradient(to left, #000 24%, transparent 100%);
+  transform: translate3d(0, calc(var(--pc, 0) * -2rem), 0);
+}
+.tier__still-img {
+  object-fit: cover;
+  object-position: 50% 25%;
+  filter: saturate(0.35) contrast(1.1);
+}
+
+/* The two that mattered are gilded, given air, and given a face. */
+.tier--landmark .tier__stone {
+  --pad-y: 2.25rem;
+  --pad-x: 1.5rem;
+  background:
+    linear-gradient(
+      152deg,
+      rgba(107, 77, 18, 0.34) 0%,
+      var(--color-stone-700) 42%,
+      var(--color-stone-850) 100%
+    );
+  border-top: 2px solid var(--color-leaf-500);
+  box-shadow:
+    0 -1px 0 rgba(253, 237, 192, 0.22),
+    0 2px 0 rgba(8, 10, 7, 0.9),
+    0 16px 44px rgba(8, 10, 7, 0.6);
+}
+.tier--landmark .tier__year {
+  color: var(--color-leaf-400);
+}
+.tier--landmark .tier__title {
+  font-size: clamp(1.75rem, 7vw, 2.75rem);
+  letter-spacing: -0.012em;
+}
+.tier--landmark .tier__figure-value {
+  font-size: 2rem;
+}
+.tier--landmark .tier__still {
+  opacity: 0.5;
+}
+
+.tier--major .tier__stone {
+  border-top-color: rgba(221, 169, 63, 0.5);
+}
+.tier--major .tier__title {
+  font-size: 1.4375rem;
+}
+
+@media (min-width: 48rem) {
+  .tiers__stack {
+    gap: 0.65rem;
+  }
+  .tier__stone {
+    --pad-y: 1.75rem;
+    --pad-x: 2.25rem;
+  }
+  .tier__title {
+    font-size: 1.5rem;
+  }
+  .tier--landmark .tier__stone {
+    --pad-y: 3rem;
+    --pad-x: 2.5rem;
+  }
+  .tier__still {
+    width: 26%;
+    max-width: 15rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .tiers__stack {
+    max-width: 74rem;
+    margin: 0 auto;
+  }
+  .tier__stone {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr) 10.5rem;
+    gap: 2.5rem;
+    align-items: baseline;
+  }
+  /*
+   * Where there is a still, it takes a column of its own instead of floating
+   * over the figures — a photograph behind a number makes neither readable.
+   */
+  .tier--still .tier__stone {
+    grid-template-columns: 6rem minmax(0, 1fr) 10.5rem 14rem;
+  }
+  .tier--still .tier__still {
+    position: relative;
+    inset: auto;
+    width: auto;
+    max-width: none;
+    align-self: stretch;
+    min-height: 9rem;
+    /* Bleed back out through the stone's own padding, so the photograph
+       reaches the cut edge instead of sitting in a margin. */
+    margin: calc(var(--pad-y) * -1) calc(var(--pad-x) * -1) calc(var(--pad-y) * -1) 0;
+    opacity: 0.44;
+    mask-image: linear-gradient(to left, #000 62%, transparent 100%);
+  }
+  .tier__text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 2.5rem;
+    align-items: baseline;
+  }
+  .tier__title {
+    margin-top: 0;
+  }
+  .tier__note {
+    margin-top: 0;
+  }
+  .tier__figure {
+    margin-top: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+    text-align: right;
+  }
+  /* The landmark courses give the title the full width and drop the note
+     beneath it, because a two-line title in a half column is not a headline. */
+  .tier--landmark .tier__text {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+  }
+}
+
+/* ==================================================================== 4. SEAM */
+
+.seam {
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--tier-gap) * 1.35) var(--gutter);
+  background:
+    radial-gradient(
+      130% 82% at 50% 32%,
+      #241a05 0%,
+      var(--color-stone-950) 58%,
+      #04050300 100%
+    ),
+    var(--color-stone-950);
+  isolation: isolate;
+}
+
+.seam__dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/*
+ * Ore strata in real CSS 3D: four planes at different depths inside one
+ * perspective, turned by the pointer. The parallax between them is
+ * geometric, not a fake offset.
+ */
+.seam__strata {
+  position: absolute;
+  inset: -12%;
+  z-index: 0;
+  perspective: 900px;
+  perspective-origin: 50% 42%;
+  pointer-events: none;
+}
+.seam__stratum {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  height: clamp(3rem, 9vw, 7rem);
+  transform-style: preserve-3d;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(150, 108, 25, 0.16) 18%,
+    rgba(221, 169, 63, 0.3) 47%,
+    rgba(107, 77, 18, 0.18) 74%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--blur, 2) * 1px));
+  transform: rotateY(calc(var(--tx, 0) * 7deg))
+    rotateX(calc(var(--ty, 0) * -4deg))
+    translateZ(calc(var(--z, 0) * 1px))
+    translateY(calc(var(--pc, 0) * var(--drift, 1) * -3.5rem))
+    rotate(var(--tilt, -4deg));
+}
+.seam__stratum[data-layer="1"] { top: 16%; --z: -320; --blur: 5; --drift: 0.4; --tilt: -6deg; opacity: 0.55; }
+.seam__stratum[data-layer="2"] { top: 37%; --z: -170; --blur: 3; --drift: 0.75; --tilt: -3deg; opacity: 0.7; }
+.seam__stratum[data-layer="3"] { top: 61%; --z: -60;  --blur: 1.5; --drift: 1.1; --tilt: -5deg; opacity: 0.85; }
+.seam__stratum[data-layer="4"] { top: 82%; --z: 40;   --blur: 0.5; --drift: 1.5; --tilt: -2deg; opacity: 1; }
+
+.seam__body {
+  position: relative;
+  z-index: 2;
+  max-width: 62rem;
+  margin: 0 auto;
+}
+
+.seam__role {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-stone-400);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+.seam__role em {
+  font-style: normal;
+  font-size: 1.0625rem;
+  letter-spacing: 0.12em;
+  color: var(--color-leaf-200);
+}
+
+.seam__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.75rem, 17vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  display: grid;
+}
+.seam__title span {
+  background-image: linear-gradient(
+    168deg,
+    var(--color-leaf-700) 0%,
+    var(--color-leaf-200) 18%,
+    var(--color-leaf-050) 32%,
+    var(--color-leaf-400) 48%,
+    var(--color-leaf-600) 62%,
+    var(--color-leaf-100) 79%,
+    var(--color-leaf-500) 100%
+  );
+  background-size: 100% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(8, 10, 7, 0.92))
+    drop-shadow(0 14px 30px rgba(8, 10, 7, 0.75));
+}
+.seam__title span:nth-child(2) { padding-left: 0.5em; }
+.seam__title span:nth-child(3) { padding-left: 1em; }
+
+.seam__lede {
+  margin-top: 1.75rem;
+  max-width: 44ch;
+  font-size: 1.0625rem;
+  line-height: 1.68;
+  color: var(--color-stone-200);
+}
+
+.seam__ledger {
+  margin-top: 3rem;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.seam__line {
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(221, 169, 63, 0.26);
+  box-shadow: 0 -1px 0 rgba(8, 10, 7, 0.8);
+}
+.seam__line dt {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-leaf-500);
+  margin-bottom: 0.45rem;
+}
+.seam__value {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 9vw, 3rem);
+  line-height: 1;
+  color: var(--color-leaf-100);
+  text-shadow: 0 2px 0 rgba(8, 10, 7, 0.9);
+}
+.seam__note {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-stone-300);
+}
+
+@media (min-width: 48rem) {
+  .seam__role {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .seam__ledger {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .seam__title {
+    font-size: clamp(6rem, 11vw, 10rem);
+  }
+  .seam__lede {
+    font-size: 1.25rem;
+  }
+}
+
+/* ================================================================ 5. SETTINGS */
+
+.settings {
+  padding: var(--tier-gap) var(--gutter);
+  background: linear-gradient(
+    to bottom,
+    var(--color-stone-950),
+    var(--color-stone-850) 40%,
+    var(--color-stone-900)
+  );
+}
+
+.settings__head {
+  margin-bottom: 3rem;
+}
+
+.settings__grid {
+  display: grid;
+  gap: 1.25rem;
+  perspective: 1100px;
+}
+
+.setting {
+  --mx: 0.5;
+  --my: 0.5;
+  --lift: 0;
+  transform-style: preserve-3d;
+}
+
+.setting__bed {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  padding: 1.75rem 1.5rem 1.9rem;
+  transform-style: preserve-3d;
+  background:
+    linear-gradient(
+      148deg,
+      rgba(107, 77, 18, 0.4) 0%,
+      var(--color-stone-700) 38%,
+      var(--color-stone-800) 100%
+    );
+  border-top: 1px solid rgba(221, 169, 63, 0.42);
+  box-shadow:
+    0 1px 0 rgba(8, 10, 7, 0.9),
+    0 10px 24px rgba(8, 10, 7, 0.45),
+    0 calc(var(--lift) * 22px) calc(var(--lift) * 52px + 4px)
+      rgba(8, 10, 7, calc(0.2 + var(--lift) * 0.35));
+  transform: rotateY(calc((var(--mx) - 0.5) * 11deg))
+    rotateX(calc((var(--my) - 0.5) * -8deg))
+    translateZ(calc(var(--lift) * 16px));
+  transition:
+    transform 0.5s var(--ease-carve),
+    box-shadow 0.5s var(--ease-carve);
+}
+
+/* Burnished foil catches the light exactly where the hand is. */
+.setting__sheen {
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+  background: radial-gradient(
+    38% 38% at calc(var(--mx) * 100%) calc(var(--my) * 100%),
+    rgba(255, 249, 228, 0.26) 0%,
+    rgba(221, 169, 63, 0.1) 42%,
+    transparent 70%
+  );
+  opacity: var(--lift);
+  transition: opacity 0.45s var(--ease-leaf);
+}
+
+.setting__plate {
+  position: relative;
+  transform: translateZ(calc(var(--lift) * 26px));
+  transition: transform 0.5s var(--ease-carve);
+}
+
+.setting__body {
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-gesso);
+}
+.setting__count {
+  margin-top: 0.55rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-leaf-200);
+  text-shadow: 0 2px 0 rgba(8, 10, 7, 0.85);
+}
+.setting__detail {
+  margin-top: 0.3rem;
+  font-size: 0.8125rem;
+  color: var(--color-stone-300);
+}
+
+.setting__stones {
+  position: relative;
+  margin-top: 1.4rem;
+  padding-top: 1.15rem;
+  display: grid;
+  gap: 0.7rem;
+  border-top: 1px solid rgba(148, 162, 134, 0.16);
+  transform: translateZ(calc(var(--lift) * 10px));
+  transition: transform 0.5s var(--ease-carve);
+}
+.setting__stones li {
+  display: grid;
+  grid-template-columns: 0.75rem 1fr;
+  gap: 0.7rem;
+  align-items: start;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-stone-300);
+}
+
+/* An uncut polki, set in a raised collet. */
+.setting__stone {
+  margin-top: 0.42rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  clip-path: polygon(50% 0%, 88% 26%, 100% 66%, 74% 100%, 26% 100%, 0% 66%, 12% 26%);
+  background: linear-gradient(
+    140deg,
+    var(--color-leaf-050) 0%,
+    var(--color-leaf-300) 34%,
+    var(--color-leaf-600) 62%,
+    var(--color-leaf-200) 100%
+  );
+  box-shadow: 0 1px 2px rgba(8, 10, 7, 0.9);
+}
+
+@media (min-width: 48rem) {
+  .settings__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .setting__bed {
+    padding: 2.25rem 2rem 2.4rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .settings__grid {
+    max-width: 74rem;
+    margin: 0 auto;
+    gap: 2rem;
+  }
+  .settings__head {
+    max-width: 74rem;
+    margin: 0 auto 3.5rem;
+  }
+}
+
+/* ================================================================= 6. SANCTUM */
+
+.sanctum {
+  padding: var(--tier-gap) var(--gutter);
+  background:
+    radial-gradient(
+      92% 62% at 22% 30%,
+      rgba(27, 58, 107, 0.32) 0%,
+      transparent 68%
+    ),
+    var(--color-stone-900);
+}
+
+.sanctum__inner {
+  display: grid;
+  gap: 2.5rem;
+  max-width: 68rem;
+  margin: 0 auto;
+}
+
+.sanctum__body {
+  margin-top: 1.25rem;
+  max-width: var(--measure);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-stone-200);
+}
+.sanctum__aside {
+  margin-top: 1.1rem;
+  max-width: 48ch;
+  font-size: 0.9375rem;
+  font-style: italic;
+  color: var(--color-stone-400);
+}
+
+.sanctum__plate {
+  position: relative;
+  justify-self: start;
+  width: min(60vw, 15rem);
+  padding: 0.55rem;
+  background: linear-gradient(
+    145deg,
+    var(--color-leaf-600),
+    var(--color-leaf-800) 45%,
+    var(--color-leaf-500)
+  );
+  box-shadow:
+    0 1px 0 rgba(255, 249, 228, 0.2),
+    0 14px 34px rgba(8, 10, 7, 0.55);
+  transform: translate3d(0, calc(var(--pc, 0) * -1.6rem), 0)
+    rotate(-1.4deg);
+}
+.sanctum__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: saturate(0.72) contrast(1.04);
+}
+
+@media (min-width: 48rem) {
+  .sanctum__inner {
+    grid-template-columns: 1.6fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+  .sanctum__plate {
+    justify-self: end;
+    width: 100%;
+    max-width: 17rem;
+  }
+}
+
+/* =============================================================== 7. ENDOWMENT */
+
+.endowment {
+  padding: var(--tier-gap) var(--gutter);
+  background: var(--color-stone-950);
+}
+
+.endowment__slab {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 2.5rem;
+  background: linear-gradient(
+    to bottom,
+    var(--color-stone-800),
+    var(--color-stone-900)
+  );
+  box-shadow:
+    inset 0 2px 3px rgba(8, 10, 7, 0.9),
+    inset 0 -1px 0 rgba(192, 203, 180, 0.14),
+    inset 0 14px 30px rgba(8, 10, 7, 0.45);
+}
+
+.endowment__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 6.5vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: var(--color-gesso);
+  text-wrap: balance;
+}
+.endowment__founded {
+  margin-top: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-leaf-500);
+}
+
+.endowment__records {
+  margin-top: 2.25rem;
+  display: grid;
+  gap: 1.75rem;
+}
+.endowment__records dt {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-leaf-200);
+}
+.endowment__records dd {
+  margin-top: 0.5rem;
+  max-width: 40ch;
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--color-stone-300);
+}
+
+@media (min-width: 48rem) {
+  .endowment__slab {
+    padding: 3.25rem 3rem 3.5rem;
+  }
+  .endowment__records {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.25rem;
+  }
+}
+
+/* ============================================================== 8. UNFINISHED */
+
+.unfinished {
+  padding: var(--tier-gap) var(--gutter);
+  background: linear-gradient(
+    to bottom,
+    var(--color-stone-950),
+    var(--color-stone-850)
+  );
+}
+
+.unfinished__head {
+  margin-bottom: 2.75rem;
+}
+
+.unfinished__list {
+  display: grid;
+  gap: 1rem;
+  max-width: 74rem;
+  margin: 0 auto;
+}
+
+/*
+ * Roughed out, not gilded: no leaf, no relief lip, and a chisel-mark hatch
+ * where the finished courses carry gold.
+ */
+.rough {
+  position: relative;
+  padding: 1.6rem 1.4rem 1.7rem;
+  background: repeating-linear-gradient(
+      118deg,
+      rgba(148, 162, 134, 0.05) 0 2px,
+      transparent 2px 9px
+    ),
+    var(--color-stone-800);
+  border-top: 1px dashed rgba(148, 162, 134, 0.3);
+}
+.rough__year {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--color-stone-400);
+}
+.rough__title {
+  margin-top: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-stone-200);
+  text-wrap: balance;
+}
+.rough__body {
+  margin-top: 0.6rem;
+  max-width: 46ch;
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--color-stone-300);
+}
+
+@media (min-width: 48rem) {
+  .unfinished__list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .rough {
+    padding: 2rem 1.75rem 2.25rem;
+  }
+  .unfinished__head {
+    max-width: 74rem;
+    margin: 0 auto 3.5rem;
+  }
+}
+
+/* ================================================================ 9. COLOPHON */
+
+.colophon {
+  padding: calc(var(--tier-gap) * 0.8) var(--gutter) 4rem;
+  background: var(--color-stone-950);
+  border-top: 1px solid rgba(148, 162, 134, 0.14);
+}
+
+.colophon__inner {
+  max-width: 74rem;
+  margin: 0 auto;
+}
+
+.colophon__mark {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 12vw, 4.5rem);
+  line-height: 1;
+  color: transparent;
+  background-image: linear-gradient(
+    160deg,
+    var(--color-leaf-700),
+    var(--color-leaf-200) 40%,
+    var(--color-leaf-600) 70%,
+    var(--color-leaf-300)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  margin-bottom: 2.75rem;
+}
+
+.colophon__cols {
+  display: grid;
+  gap: 2.25rem;
+}
+.colophon__cols h2 {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--color-leaf-500);
+  margin-bottom: 0.8rem;
+}
+.colophon__cols p {
+  font-size: 0.875rem;
+  line-height: 1.68;
+  color: var(--color-stone-300);
+  max-width: 42ch;
+}
+
+.colophon__credits {
+  display: grid;
+  gap: 0.85rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--color-stone-300);
+}
+.colophon__credits a {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 48rem) {
+  .colophon__cols {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+}

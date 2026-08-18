@@ -1,0 +1,1236 @@
+/* ===========================================================================
+   /celebs/yash_01 — NEON
+   Premium neon-accented dark. Mobile-first: every base rule is the phone and
+   the breakpoints only ever add.
+
+   SCOPING CONTRACT: every selector in this file is nested under `.y01`.
+   Next.js does not remove route stylesheets on client navigation, so an
+   unscoped rule here would still be live on /celebs/yash and would repaint a
+   page whose design explicitly refuses neon. Do not add a bare selector.
+   =========================================================================== */
+
+.y01 {
+  /* --- Ground. Near-black, blue undertone, never neutral grey. */
+  --ink-950: #04050a;
+  --ink-900: #070912;
+  --ink-850: #0a0d18;
+  --ink-800: #0f1322;
+  --ink-700: #161b2d;
+  --ink-600: #222941;
+  --ink-500: #333c5c;
+
+  /* --- Text. --txt-mute is the floor: 5.1:1 on --ink-900 at 11px. */
+  --txt: #e9edf7;
+  --txt-dim: #a3abc4;
+  --txt-mute: #7b8399;
+
+  /* --- Neon. Venom carries the page; magenta belongs to Toxic; cyan is trim. */
+  --venom: #b6ff3a;
+  --venom-dim: #8fd424;
+  --venom-pale: #e2ff9e;
+  --magenta: #ff2f8e;
+  --magenta-pale: #ffa8ce;
+  --cyan: #35e6ff;
+
+  --rgb-venom: 182 255 58;
+  --rgb-magenta: 255 47 142;
+  --rgb-cyan: 53 230 255;
+
+  --font-disp: var(--font-syne), "Helvetica Neue", sans-serif;
+  --font-txt: var(--font-inter), system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-neon: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --pad: 1.25rem;
+  --stack: 6rem;
+
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+  background: var(--ink-900);
+  color: var(--txt);
+  font-family: var(--font-txt);
+  line-height: 1.65;
+  /* The gold page sets these globally on body; this route needs its own. */
+  font-size: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .y01 {
+    --pad: 2.5rem;
+    --stack: 8.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .y01 {
+    --pad: 4rem;
+    --stack: 11rem;
+  }
+}
+
+.y01 ::selection {
+  background: var(--venom);
+  color: var(--ink-950);
+}
+
+.y01 :focus-visible {
+  outline: 2px solid var(--venom);
+  outline-offset: 3px;
+}
+
+.y01 a {
+  color: var(--venom-pale);
+  text-decoration-color: rgb(var(--rgb-venom) / 0.4);
+  text-underline-offset: 0.22em;
+  transition: color 0.3s var(--ease-neon);
+}
+.y01 a:hover {
+  color: var(--venom);
+}
+
+/* ------------------------------------------------------------- materials */
+
+/*
+ * Film grain. Neon on a flat digital black reads as a screenshot of a website;
+ * neon over grain reads as a photograph of a sign. Texture, never pattern.
+ */
+.y01 .grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+/*
+ * A neon tube is a bright core inside a soft bloom, so every glow here is at
+ * least two shadows: a tight one at the letter edge and a wide diffuse one.
+ * A single large blur is a smudge and reads as cheap.
+ */
+.y01 .n-venom {
+  color: var(--venom);
+  text-shadow:
+    0 0 1px rgb(var(--rgb-venom) / 0.95),
+    0 0 10px rgb(var(--rgb-venom) / 0.5),
+    0 0 32px rgb(var(--rgb-venom) / 0.22);
+}
+.y01 .n-magenta {
+  color: var(--magenta);
+  text-shadow:
+    0 0 1px rgb(var(--rgb-magenta) / 0.95),
+    0 0 10px rgb(var(--rgb-magenta) / 0.5),
+    0 0 34px rgb(var(--rgb-magenta) / 0.24);
+}
+.y01 .n-cyan {
+  color: var(--cyan);
+  text-shadow:
+    0 0 1px rgb(var(--rgb-cyan) / 0.9),
+    0 0 10px rgb(var(--rgb-cyan) / 0.45);
+}
+
+/* A lit hairline: the rule itself plus the light it throws on the wall. */
+.y01 .rule {
+  position: relative;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--rgb-venom) / 0.75) 22%,
+    rgb(var(--rgb-venom) / 0.75) 78%,
+    transparent
+  );
+}
+.y01 .rule::after {
+  content: "";
+  position: absolute;
+  inset: -3px 0 -3px 0;
+  background: inherit;
+  filter: blur(5px);
+  opacity: 0.55;
+}
+
+/* ------------------------------------------------------------------- type */
+
+.y01 .eyebrow {
+  font-family: var(--font-txt);
+  /* 11px floor — never smaller, per the project's accessibility standard. */
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--txt-mute);
+}
+
+.y01 .h2 {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2rem, 9vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--txt);
+}
+
+.y01 .lede {
+  margin-top: 1rem;
+  max-width: 46ch;
+  font-size: 1.0625rem;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+@media (min-width: 64rem) {
+  .y01 .h2 {
+    font-size: clamp(2.8rem, 4.4vw, 4.4rem);
+  }
+  .y01 .lede {
+    font-size: 1.1875rem;
+  }
+}
+
+.y01 .shell {
+  padding-inline: var(--pad);
+  margin-inline: auto;
+  max-width: 82rem;
+}
+
+.y01 .sec {
+  position: relative;
+  padding-block: var(--stack);
+}
+
+/* --------------------------------------------------------------- reveal
+ * The page's one authored motion: a tube striking. The element is legible
+ * before any script runs — dimmed and desaturated, as an unlit tube still
+ * shows its glass — and lighting it warms the colour up rather than sliding
+ * the element in from somewhere it never was.
+ */
+.y01 .lit {
+  opacity: 0.4;
+  filter: saturate(0.25) brightness(0.72);
+  transition:
+    opacity 0.75s var(--ease-out),
+    filter 0.75s var(--ease-out),
+    transform 0.75s var(--ease-out);
+}
+.y01 .lit[data-lit="true"] {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+/* Only display type gets the ignition flicker; body copy just warms up. */
+.y01 .tube[data-lit="true"] {
+  animation: strike 0.62s var(--ease-neon) both;
+}
+
+@keyframes strike {
+  0% {
+    opacity: 0.25;
+  }
+  12% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.42;
+  }
+  32% {
+    opacity: 1;
+  }
+  44% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ==================================================================== HERO */
+
+.y01 .hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  isolation: isolate;
+  overflow: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+  /* perspective is what makes the layer offsets read as depth, not as slide */
+  perspective: 1100px;
+  background:
+    radial-gradient(
+      120% 76% at 50% 4%,
+      var(--ink-700) 0%,
+      var(--ink-850) 44%,
+      var(--ink-950) 100%
+    );
+}
+
+/*
+ * The inscription needs a wall to sit on, not a face. This beds the lower half
+ * of the frame down so body copy keeps its contrast over the portrait, and it
+ * also sinks the horizon hairline — which otherwise ruled a line straight
+ * through the birthplace.
+ */
+.y01 .hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 64%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(7 9 18 / 0.74) 40%,
+    rgb(4 5 10 / 0.95) 80%
+  );
+}
+
+.y01 .hero__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform-style: preserve-3d;
+  /* --tx/--ty come from usePointerTilt; they default to 0 before any input. */
+  transform: rotateY(calc(var(--tx, 0) * 4.5deg))
+    rotateX(calc(var(--ty, 0) * -3deg));
+  transition: transform 0.1s linear;
+}
+
+/*
+ * On the phone the portrait takes the top of the frame and the inscription
+ * sits below it. Behind the text it was legible as neither: a dim photograph
+ * competing with the name for the same pixels.
+ */
+.y01 .hero__portrait {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: start center;
+  transform: translate3d(
+    calc(var(--tx, 0) * -14px),
+    calc(var(--p, 0) * -40px),
+    0
+  );
+}
+
+.y01 .hero__portrait img {
+  width: min(90vw, 24rem);
+  height: auto;
+  object-fit: contain;
+  opacity: 0.72;
+  /* The portrait is a CC photo of a person, not a neon object — it is graded
+     into the palette rather than recoloured out of recognition. */
+  filter: grayscale(0.45) contrast(1.1) brightness(0.88);
+  /* Fades out well above the inscription so the two never overlap. */
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 18%,
+    #000 62%,
+    transparent 94%
+  );
+}
+
+/* The horizon line the name sits on. */
+.y01 .hero__horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--rgb-venom) / 0.5) 30%,
+    rgb(var(--rgb-cyan) / 0.35) 70%,
+    transparent
+  );
+  transform: translate3d(0, calc(var(--p, 0) * 60px), 0);
+}
+
+.y01 .hero__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(60px);
+}
+.y01 .hero__glow--a {
+  width: 26rem;
+  height: 26rem;
+  left: -8rem;
+  top: 12%;
+  background: rgb(var(--rgb-venom) / 0.14);
+  transform: translate3d(calc(var(--tx, 0) * 26px), calc(var(--p, 0) * -70px), 0);
+}
+.y01 .hero__glow--b {
+  width: 22rem;
+  height: 22rem;
+  right: -7rem;
+  bottom: 8%;
+  background: rgb(var(--rgb-magenta) / 0.13);
+  transform: translate3d(calc(var(--tx, 0) * -22px), calc(var(--p, 0) * 50px), 0);
+}
+
+.y01 .hero__mark {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 16%;
+  translate: -50% 0;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(6rem, 34vw, 20rem);
+  line-height: 0.8;
+  color: rgb(var(--rgb-venom) / 0.05);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  transform: translate3d(0, calc(var(--p, 0) * -60px), 0);
+}
+
+.y01 .hero__inner {
+  position: relative;
+  z-index: 2;
+  align-self: end;
+  padding-block: 3rem 4.5rem;
+}
+
+.y01 .hero__name {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  /* Capped so the name never outgrows the phone it is read on. */
+  font-size: clamp(3.75rem, 21vw, 11rem);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.y01 .hero__kn {
+  display: block;
+  margin-top: 0.65rem;
+  font-family: var(--font-txt);
+  font-size: clamp(1.1rem, 5vw, 1.7rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--txt-dim);
+}
+
+.y01 .hero__epithet {
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.y01 .hero__epithet span:first-child {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 3.6vw, 1.15rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.y01 .hero__meta {
+  margin-top: 1.8rem;
+  max-width: 42ch;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+.y01 .hero__facts {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  padding: 0;
+  list-style: none;
+}
+.y01 .hero__facts li {
+  display: grid;
+  gap: 0.15rem;
+}
+.y01 .hero__facts b {
+  font-family: var(--font-disp);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--txt);
+}
+
+@media (min-width: 30rem) {
+  .y01 .hero__facts b {
+    font-size: 1rem;
+  }
+}
+
+.y01 .hero__cue {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding-bottom: 1.75rem;
+}
+.y01 .hero__cue i {
+  display: block;
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(180deg, rgb(var(--rgb-venom) / 0.8), transparent);
+  animation: cue 2.6s var(--ease-neon) infinite;
+}
+
+@keyframes cue {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scaleY(0.6);
+    transform-origin: top;
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+@media (min-width: 64rem) {
+  .y01 .hero__inner {
+    padding-block: 4rem 6rem;
+  }
+  .y01 .hero__portrait {
+    place-items: center end;
+    padding-right: 6%;
+  }
+  .y01 .hero__portrait img {
+    width: min(40vw, 32rem);
+    opacity: 0.78;
+    mask-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      #000 14%,
+      #000 74%,
+      transparent 99%
+    );
+  }
+  .y01 .hero__mark {
+    left: auto;
+    right: 3%;
+    translate: 0 0;
+    font-size: clamp(10rem, 20vw, 22rem);
+  }
+}
+
+/* ============================================================ TOXIC BANNER */
+
+/*
+ * The banner is a plate, not a link. The brief asked for a CTA that jumps to
+ * the Toxic section; the product rule is that scrolling is the only input, so
+ * this sets the expectation and the section at the bottom pays it off.
+ */
+.y01 .banner {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(3.5rem, 12vw, 6.5rem);
+  border-block: 1px solid rgb(var(--rgb-magenta) / 0.22);
+  background:
+    radial-gradient(
+      90% 130% at 12% 0%,
+      rgb(var(--rgb-magenta) / 0.16) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      70% 120% at 92% 100%,
+      rgb(var(--rgb-venom) / 0.1) 0%,
+      transparent 60%
+    ),
+    var(--ink-950);
+}
+
+.y01 .banner__word {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(3rem, 17vw, 9rem);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.y01 .banner__sub {
+  margin-top: 0.5rem;
+  font-family: var(--font-disp);
+  font-weight: 600;
+  font-size: clamp(0.9rem, 3.6vw, 1.25rem);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--magenta-pale);
+}
+
+.y01 .banner__line {
+  margin-top: 1.5rem;
+  max-width: 44ch;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+.y01 .banner__strip {
+  margin-top: 2.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem 1.5rem;
+}
+
+.y01 .banner__date {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 4.6vw, 1.5rem);
+  letter-spacing: 0.02em;
+  color: var(--txt);
+}
+
+/* Reserves its own height so filling it on mount shifts nothing. */
+.y01 .banner__count {
+  min-height: 1.2em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--venom);
+}
+
+.y01 .banner__scan {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0 3px,
+    rgb(255 255 255 / 0.014) 3px 4px
+  );
+}
+
+/* ==================================================================== BIO */
+
+.y01 .bio__grid {
+  margin-top: 3rem;
+  display: grid;
+  gap: 0;
+}
+
+.y01 .beat {
+  position: relative;
+  padding: 1.75rem 0 1.75rem 2.5rem;
+  border-left: 1px solid var(--ink-600);
+}
+
+/* The node on the rail. Lit, because the rail is the neon here. */
+.y01 .beat::before {
+  content: "";
+  position: absolute;
+  left: -3.5px;
+  top: 2.35rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--venom);
+  box-shadow:
+    0 0 0 3px rgb(var(--rgb-venom) / 0.12),
+    0 0 12px rgb(var(--rgb-venom) / 0.7);
+}
+
+.y01 .beat__year {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  color: var(--venom);
+}
+
+.y01 .beat__title {
+  margin-top: 0.35rem;
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 5.5vw, 1.75rem);
+  line-height: 1.15;
+  color: var(--txt);
+}
+
+.y01 .beat__body {
+  margin-top: 0.6rem;
+  max-width: 54ch;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+@media (min-width: 64rem) {
+  .y01 .beat {
+    padding-left: 3.5rem;
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 2rem;
+  }
+  .y01 .beat__year {
+    padding-top: 0.35rem;
+  }
+}
+
+/* ============================================================= FILMOGRAPHY */
+
+.y01 .films {
+  margin-top: 3rem;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--ink-700);
+}
+
+.y01 .film {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0.35rem 1rem;
+  padding-block: 1.4rem;
+  border-bottom: 1px solid var(--ink-700);
+  align-items: baseline;
+}
+
+.y01 .film__year {
+  font-family: var(--font-disp);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  color: var(--txt-mute);
+}
+
+.y01 .film__title {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  color: var(--txt);
+}
+
+.y01 .film__note {
+  grid-column: 2;
+  max-width: 58ch;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+.y01 .film__figure {
+  grid-column: 2;
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: fit-content;
+}
+.y01 .film__figure b {
+  font-family: var(--font-disp);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--venom);
+}
+.y01 .film__figure span {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--txt-mute);
+}
+
+/* A landmark is the only row allowed to glow — three of eleven, so it means
+   something. Tier is carried by light, not by a badge. */
+.y01 .film[data-tier="landmark"] {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--rgb-venom) / 0.07),
+    transparent 55%
+  );
+  padding-inline: 1rem;
+  margin-inline: -1rem;
+}
+.y01 .film[data-tier="landmark"] .film__title {
+  font-size: 1.4rem;
+  color: var(--venom-pale);
+  text-shadow: 0 0 18px rgb(var(--rgb-venom) / 0.28);
+}
+.y01 .film[data-tier="major"] .film__title {
+  color: var(--venom-pale);
+}
+
+@media (min-width: 48rem) {
+  .y01 .film {
+    grid-template-columns: 5rem minmax(0, 16rem) 1fr;
+    gap: 0.4rem 2rem;
+    padding-block: 1.6rem;
+  }
+  .y01 .film__note {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 0;
+  }
+  .y01 .film__figure {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .y01 .film__title {
+    font-size: 1.25rem;
+  }
+  .y01 .film[data-tier="landmark"] .film__title {
+    font-size: 1.6rem;
+  }
+}
+
+/* ================================================================= GALLERY */
+
+.y01 .gal {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.y01 .plate {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ink-700);
+  background: var(--ink-850);
+  /* Each plate drifts by its own --depth, so the grid has parallax between
+     its own cells rather than moving as one sheet. */
+  transform: translate3d(0, calc(var(--pc, 0) * var(--depth, 0) * -18px), 0);
+  aspect-ratio: 4 / 5;
+}
+
+.y01 .plate--wide {
+  grid-column: span 2;
+  aspect-ratio: 16 / 10;
+}
+
+.y01 .plate--tall {
+  aspect-ratio: 3 / 4;
+}
+
+.y01 .plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.5) contrast(1.08) brightness(0.82);
+  transition: filter 0.5s var(--ease-out);
+}
+
+.y01 .plate:hover img {
+  filter: grayscale(0) contrast(1.05) brightness(0.95);
+}
+
+.y01 .plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 55%,
+    rgb(4 5 10 / 0.55) 100%
+  );
+}
+
+.y01 .plate figcaption {
+  position: absolute;
+  z-index: 2;
+  left: 0.65rem;
+  right: 0.65rem;
+  bottom: 0.55rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: var(--txt-dim);
+  text-shadow: 0 1px 4px rgb(4 5 10 / 0.9);
+}
+
+@media (min-width: 48rem) {
+  .y01 .gal {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* =================================================================== TOXIC */
+
+/*
+ * The payoff. This is the only region where magenta leads, so arriving here
+ * is a change of light rather than more of the same page.
+ */
+.y01 .toxic {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      100% 60% at 50% 0%,
+      rgb(var(--rgb-magenta) / 0.13) 0%,
+      transparent 58%
+    ),
+    var(--ink-950);
+  border-top: 1px solid rgb(var(--rgb-magenta) / 0.25);
+}
+
+.y01 .toxic__word {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(3.25rem, 19vw, 10rem);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.y01 .toxic__sub {
+  margin-top: 0.6rem;
+  font-family: var(--font-disp);
+  font-weight: 600;
+  font-size: clamp(0.85rem, 3.4vw, 1.2rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--magenta-pale);
+}
+
+.y01 .toxic__premise {
+  margin-top: 2rem;
+  max-width: 52ch;
+  font-size: 1.0625rem;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+.y01 .toxic__block {
+  margin-top: 3.5rem;
+}
+
+/* --- dual role */
+
+.y01 .roles {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.y01 .role {
+  position: relative;
+  padding: 1.5rem;
+  border: 1px solid rgb(var(--rgb-magenta) / 0.2);
+  background: linear-gradient(
+    160deg,
+    rgb(var(--rgb-magenta) / 0.06),
+    transparent 70%
+  );
+}
+
+.y01 .role__name {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  line-height: 1;
+  color: var(--magenta-pale);
+  text-shadow: 0 0 22px rgb(var(--rgb-magenta) / 0.3);
+}
+
+.y01 .role__alias {
+  margin-top: 0.4rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--magenta);
+}
+
+.y01 .role__note {
+  margin-top: 0.75rem;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+@media (min-width: 48rem) {
+  .y01 .roles {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* --- scale figures */
+
+.y01 .scale {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--ink-700);
+  border: 1px solid var(--ink-700);
+}
+
+.y01 .scale > div {
+  padding: 1.35rem 1.1rem;
+  background: var(--ink-900);
+}
+
+.y01 .scale dt {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 6vw, 1.9rem);
+  line-height: 1;
+  color: var(--venom);
+  text-shadow: 0 0 20px rgb(var(--rgb-venom) / 0.25);
+}
+
+.y01 .scale .scale__label {
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--txt-mute);
+}
+
+.y01 .scale dd {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+@media (min-width: 64rem) {
+  .y01 .scale {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* --- cast */
+
+.y01 .cast {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ink-700);
+}
+
+.y01 .cast li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.85rem;
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--ink-700);
+}
+
+.y01 .cast b {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  color: var(--txt);
+}
+
+.y01 .cast span {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--magenta-pale);
+}
+
+.y01 .cast i {
+  font-size: 0.8125rem;
+  font-style: normal;
+  color: var(--txt-mute);
+}
+
+@media (min-width: 64rem) {
+  .y01 .cast {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem;
+  }
+}
+
+/* --- production timeline */
+
+.y01 .track {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0;
+}
+
+.y01 .stop {
+  position: relative;
+  padding: 1.35rem 0 1.35rem 2.25rem;
+  border-left: 1px solid rgb(var(--rgb-magenta) / 0.25);
+}
+
+.y01 .stop::before {
+  content: "";
+  position: absolute;
+  left: -3.5px;
+  top: 1.95rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--magenta);
+  box-shadow: 0 0 12px rgb(var(--rgb-magenta) / 0.75);
+}
+
+/* The last stop is the release: it gets the brighter node. */
+.y01 .stop:last-child::before {
+  background: var(--venom);
+  box-shadow:
+    0 0 0 4px rgb(var(--rgb-venom) / 0.14),
+    0 0 16px rgb(var(--rgb-venom) / 0.85);
+}
+
+.y01 .stop__date {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--magenta-pale);
+}
+.y01 .stop:last-child .stop__date {
+  color: var(--venom);
+}
+
+.y01 .stop__title {
+  margin-top: 0.3rem;
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--txt);
+}
+
+.y01 .stop__body {
+  margin-top: 0.45rem;
+  max-width: 54ch;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--txt-dim);
+}
+
+/* --- credits + sound */
+
+.y01 .slate {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--ink-700);
+}
+
+.y01 .slate div {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 1rem;
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--ink-700);
+  align-items: baseline;
+}
+
+.y01 .slate dt {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--txt-mute);
+}
+
+.y01 .slate dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--txt);
+}
+
+/* ================================================================ COLOPHON */
+
+.y01 .colo {
+  border-top: 1px solid var(--ink-700);
+  background: var(--ink-950);
+  padding-block: 4rem 5rem;
+  font-size: 0.875rem;
+  color: var(--txt-mute);
+}
+
+.y01 .colo h2 {
+  font-family: var(--font-disp);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+  margin-bottom: 0.7rem;
+}
+
+.y01 .colo__cols {
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+
+.y01 .colo ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.y01 .colo p {
+  max-width: 52ch;
+}
+
+.y01 .colo__mark {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 12vw, 5rem);
+  line-height: 1;
+  color: rgb(var(--rgb-venom) / 0.14);
+}
+
+@media (min-width: 64rem) {
+  .y01 .colo__cols {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+}
+
+/* =========================================================== REDUCED MOTION
+ * Everything resolves to its final state. No visitor gets less content than
+ * any other — only less movement.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .y01 *,
+  .y01 *::before,
+  .y01 *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .y01 .lit {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+  /* Parallax and tilt resolve to their neutral offsets, not to a half-slid
+     position: the hooks stop writing --p/--tx, so the fallbacks below hold. */
+  .y01 .hero__stage,
+  .y01 .hero__portrait,
+  .y01 .hero__glow,
+  .y01 .hero__mark,
+  .y01 .hero__horizon,
+  .y01 .plate {
+    transform: none;
+  }
+  .y01 .hero__cue i {
+    animation: none;
+    opacity: 0.6;
+  }
+}

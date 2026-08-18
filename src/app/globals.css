@@ -1,26 +1,235 @@
 @import "tailwindcss";
 
+/* ===========================================================================
+   HOYSALA GOLD-LEAF RELIEF
+   A visual system taken from two Karnataka crafts: the chloritic-schist
+   friezes of Hoysala temple walls, and Mysore traditional painting, where
+   gesso is raised in relief and then covered in 22-carat gold leaf.
+   Ground is stone. Accent is leaf. Everything else is pigment.
+   =========================================================================== */
+
+@theme {
+  /* --- Chloritic schist (soapstone). Dark blue-green, never neutral black. */
+  --color-stone-950: #080a07;
+  --color-stone-900: #0e120c;
+  --color-stone-850: #141911;
+  --color-stone-800: #1b2117;
+  --color-stone-700: #242c1e;
+  --color-stone-600: #333d2a;
+  --color-stone-500: #4a5740;
+  /* Lifted off the obvious mid-tone: at 11px on the darkest ground this is
+     5.4:1, where the value it replaced sat at 4.1 and failed. */
+  --color-stone-400: #7e8f6f;
+  --color-stone-300: #94a286;
+  --color-stone-200: #c0cbb4;
+
+  /* --- 22-carat leaf. Pale where it is thin, deep where it is burnished. */
+  --color-leaf-050: #fff9e4;
+  --color-leaf-100: #fdedc0;
+  --color-leaf-200: #f6da94;
+  --color-leaf-300: #edc367;
+  --color-leaf-400: #dda93f;
+  --color-leaf-500: #c08d24;
+  --color-leaf-600: #966c19;
+  --color-leaf-700: #6b4d12;
+  --color-leaf-800: #43300c;
+
+  /* --- Gesso: the raised chalk ground the leaf is laid over. */
+  --color-gesso: #efe6d2;
+  --color-gesso-dim: #cfc4ab;
+
+  /* --- Mysore pigments. Used sparingly, as pigment is. */
+  --color-indigo-ink: #1b3a6b;
+  --color-indigo-lit: #3a63a4;
+  --color-kumkum: #b3321e;
+  --color-malachite: #1f6b4f;
+
+  --font-display: var(--font-cinzel), "Times New Roman", serif;
+  --font-body: var(--font-spectral), Georgia, serif;
+
+  --ease-carve: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-leaf: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gutter: 1.25rem;
+  --measure: 68ch;
+  --tier-gap: 5.5rem;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 40rem) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --gutter: 2.5rem;
+    --tier-gap: 8rem;
   }
 }
 
+@media (min-width: 64rem) {
+  :root {
+    --gutter: 4rem;
+    --tier-gap: 11rem;
+  }
+}
+
+/* ---------------------------------------------------------------- materials */
+
+/*
+ * Stone grain. Carved schist is granular at close range and flat at distance,
+ * so the turbulence is fine and the opacity is low. This is a texture, not a
+ * pattern: it must never resolve into anything the eye can name.
+ */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+}
+@utility grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+}
+
+/* ---------------------------------------------------------------- base */
+
+* {
+  min-width: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-stone-900);
+  color: var(--color-stone-200);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  /* `clip`, not `hidden`: hidden would turn body into a scroll container and
+     break both position:sticky and Lenis. */
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-leaf-500);
+  color: var(--color-stone-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-leaf-200);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+a {
+  color: var(--color-leaf-200);
+  text-decoration-color: color-mix(in srgb, var(--color-leaf-500) 55%, transparent);
+  text-underline-offset: 0.22em;
+  transition: color 0.35s var(--ease-leaf);
+}
+a:hover {
+  color: var(--color-leaf-050);
+}
+
+/* Lenis owns the scroll; these are its required hooks. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- gilding
+ * The page has exactly one authored motion, and it is not a reveal: it is the
+ * act of gilding. A band of leaf travels across the element from left to
+ * right, and the surface is brighter behind the band than in front of it —
+ * which is what laying and burnishing leaf actually looks like.
+ *
+ * A fade-and-rise would have been cheaper to write and would have meant
+ * nothing. This costs one paint per element, once, and never repeats; the
+ * things that must stay cheap on a mid-range phone are the loops, and those
+ * are bounded elsewhere.
+ */
+@keyframes lay-leaf {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+.gild {
+  position: relative;
+  /* Bare stone, and legible: the content is never hidden waiting for script. */
+  opacity: 0.42;
+  transition: opacity 0.72s var(--ease-carve);
+}
+.gild[data-gilded="true"] {
+  opacity: 1;
+}
+
+.gild::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    100deg,
+    transparent 40%,
+    rgba(221, 169, 63, 0.32) 46%,
+    rgba(253, 237, 192, 0.62) 49.5%,
+    rgba(255, 249, 228, 0.78) 51%,
+    rgba(221, 169, 63, 0.3) 55%,
+    transparent 61%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+}
+.gild[data-gilded="true"]::after {
+  animation: lay-leaf 0.92s var(--ease-leaf) both;
+  /* The leading edge fades in and out so the band has no hard start or stop. */
+  animation-name: lay-leaf, leaf-edge;
+}
+
+@keyframes leaf-edge {
+  0% {
+    opacity: 0;
+  }
+  22%,
+  74% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .gild {
+    opacity: 1;
+  }
+  /* No band at all, rather than a band that teleports. */
+  .gild::after {
+    display: none;
+  }
 }
