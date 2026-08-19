@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Yash — Rocking Star",
     description:
-      "From ₹300 and a bus to Bangalore, to Toxic: A Fairy Tale for Grown-Ups.",
+      "From ₹300 and Bangalore at sixteen, to Toxic: A Fairy Tale for Grown-Ups.",
     images: ["/yash/portrait-main.jpg"],
     type: "profile",
   },

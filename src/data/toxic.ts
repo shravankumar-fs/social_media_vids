@@ -95,7 +95,7 @@ export const toxicTimeline = [
   {
     date: "September 2024",
     title: "Twenty acres of period",
-    body: "The main schedule moves to a 20-acre set near Bengaluru recreating the 1940s to the 1970s — over 1,000 crew and 450 actors.",
+    body: "The main schedule moves onto the standing period set outside Bengaluru, built to hold the decades the film spans.",
   },
   {
     date: "8 January 2026",

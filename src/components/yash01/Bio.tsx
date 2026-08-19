@@ -10,11 +10,10 @@ export function Bio() {
   return (
     <section className="sec" id="bio" ref={reveal} aria-labelledby="bio-title">
       <div className="shell">
-        <p className="eyebrow lit">Bio</p>
-        <h2 id="bio-title" className="h2 lit tube" data-lit-index="1">
-          Three hundred rupees and a bus to Bangalore
+        <h2 id="bio-title" className="h2 lit tube">
+          Three hundred rupees, and Bangalore at sixteen
         </h2>
-        <p className="lede lit" data-lit-index="2">
+        <p className="lede lit" data-lit-index="1">
           Naveen Kumar Gowda left Hassan district at sixteen. What follows is
           the road from a village to the highest-grossing Kannada film ever
           made.
@@ -43,11 +42,10 @@ export function Films() {
   return (
     <section className="sec" ref={reveal} aria-labelledby="films-title">
       <div className="shell">
-        <p className="eyebrow lit">Filmography</p>
-        <h2 id="films-title" className="h2 lit tube" data-lit-index="1">
+        <h2 id="films-title" className="h2 lit tube">
           The work
         </h2>
-        <p className="lede lit" data-lit-index="2">
+        <p className="lede lit" data-lit-index="1">
           Selected features, from the 2007 debut to a film that took over ₹10
           billion worldwide.
         </p>
@@ -57,7 +55,7 @@ export function Films() {
             <article
               className="film lit"
               data-tier={f.tier}
-              data-lit-index={Math.min(i, 6)}
+              data-lit-index={i % 5}
               key={`${f.year}-${f.title}`}
             >
               <p className="film__year">{f.year}</p>

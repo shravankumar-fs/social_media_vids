@@ -135,11 +135,10 @@ export default function Gallery() {
   return (
     <section className="sec" id="gallery" ref={reveal} aria-labelledby="gal-title">
       <div className="shell">
-        <p className="eyebrow lit">Gallery</p>
-        <h2 id="gal-title" className="h2 lit tube" data-lit-index="1">
+        <h2 id="gal-title" className="h2 lit tube">
           On the record
         </h2>
-        <p className="lede lit" data-lit-index="2">
+        <p className="lede lit" data-lit-index="1">
           Freely licensed photographs from Wikimedia Commons. Every
           photographer is credited at the foot of this page, as their licences
           require.

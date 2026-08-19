@@ -30,14 +30,16 @@
   --venom-pale: #e2ff9e;
   --magenta: #ff2f8e;
   --magenta-pale: #ffa8ce;
-  --cyan: #35e6ff;
 
   --rgb-venom: 182 255 58;
   --rgb-magenta: 255 47 142;
-  --rgb-cyan: 53 230 255;
 
-  --font-disp: var(--font-syne), "Helvetica Neue", sans-serif;
+  /* Inter sits in the display stack ahead of the system sans purely so ₹
+     (U+20B9), which Syne does not carry, falls to a face that matches the
+     digits beside it instead of to Helvetica. */
+  --font-disp: var(--font-syne), var(--font-inter), sans-serif;
   --font-txt: var(--font-inter), system-ui, sans-serif;
+  --font-kn: var(--font-kannada), var(--font-inter), sans-serif;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-neon: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -126,12 +128,7 @@
     0 0 10px rgb(var(--rgb-magenta) / 0.5),
     0 0 34px rgb(var(--rgb-magenta) / 0.24);
 }
-.y01 .n-cyan {
-  color: var(--cyan);
-  text-shadow:
-    0 0 1px rgb(var(--rgb-cyan) / 0.9),
-    0 0 10px rgb(var(--rgb-cyan) / 0.45);
-}
+
 
 /* A lit hairline: the rule itself plus the light it throws on the wall. */
 .y01 .rule {
@@ -246,32 +243,37 @@
   }
 }
 
+/*
+ * No `transform` reset here. `.lit` never sets a transform, so the reset was
+ * vestigial — but it outranked `.y01 .plate`'s parallax translate, and every
+ * plate carries `.lit`, so gallery drift died the moment a plate lit up.
+ */
 .y01 .lit[data-lit="true"] {
   opacity: 1;
   filter: none;
-  transform: none;
 }
 
 /* Only display type gets the ignition flicker; body copy just warms up. */
 .y01 .tube[data-lit="true"] {
-  animation: strike 0.62s var(--ease-neon) both;
+  animation: strike 0.9s var(--ease-neon) both;
 }
 
+/*
+ * One flicker, not four. The previous keyframe ran six opacity reversals in
+ * 0.62s — about 4 flashes/second, over the WCAG 2.3.1 general threshold, on
+ * the largest and brightest element in the first viewport, and it bottomed out
+ * at 0.25 where the name measured 1.6:1. Two rises across 0.9s is 2.2/second,
+ * and the floor never drops below the unlit state the tube already holds.
+ */
 @keyframes strike {
   0% {
-    opacity: 0.25;
+    opacity: 0.78;
   }
-  12% {
+  22% {
     opacity: 1;
   }
-  20% {
-    opacity: 0.42;
-  }
-  32% {
-    opacity: 1;
-  }
-  44% {
-    opacity: 0.7;
+  38% {
+    opacity: 0.88;
   }
   100% {
     opacity: 1;
@@ -308,16 +310,32 @@
 .y01 .hero::after {
   content: "";
   position: absolute;
-  inset: auto 0 0 0;
-  height: 64%;
+  inset: 0;
   z-index: 1;
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    transparent 0%,
-    rgb(7 9 18 / 0.74) 40%,
-    rgb(4 5 10 / 0.95) 80%
+    rgb(7 9 18 / 0.18) 0%,
+    rgb(7 9 18 / 0.34) 16%,
+    rgb(7 9 18 / 0.68) 34%,
+    rgb(7 9 18 / 0.88) 58%,
+    rgb(4 5 10 / 0.96) 84%
   );
+}
+
+/*
+ * A scrim alone cannot guarantee small light type over a photograph: a bright
+ * patch in the image defeats any alpha the portrait could survive. The
+ * inscription's non-luminous type therefore carries its own tight ground.
+ * The name is excluded — it is neon and brings its own glow.
+ */
+.y01 .hero .eyebrow,
+.y01 .hero__birth,
+.y01 .hero__meta,
+.y01 .hero__facts {
+  text-shadow:
+    0 1px 2px rgb(4 5 10 / 0.92),
+    0 2px 10px rgb(4 5 10 / 0.66);
 }
 
 .y01 .hero__stage {
@@ -356,14 +374,15 @@
   /* The portrait is a CC photo of a person, not a neon object — it is graded
      into the palette rather than recoloured out of recognition. */
   filter: grayscale(0.45) contrast(1.1) brightness(0.88);
-  /* Fades out well above the inscription so the two never overlap. */
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    #000 18%,
-    #000 62%,
-    transparent 94%
-  );
+  /*
+   * Fades on both axes. A vertical-only mask left the photograph with hard
+   * cut edges down its sides at every width — a rectangle of picture sitting
+   * on the ground rather than resolving into it.
+   */
+  mask-image:
+    linear-gradient(180deg, transparent 0%, #000 18%, #000 62%, transparent 94%),
+    linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-composite: intersect;
 }
 
 /* The horizon line the name sits on. */
@@ -377,7 +396,7 @@
     90deg,
     transparent,
     rgb(var(--rgb-venom) / 0.5) 30%,
-    rgb(var(--rgb-cyan) / 0.35) 70%,
+    rgb(var(--rgb-venom) / 0.28) 70%,
     transparent
   );
   transform: translate3d(0, calc(var(--p, 0) * 60px), 0);
@@ -414,23 +433,6 @@
   transform: translate3d(calc(var(--tx, 0) * -22px), calc(var(--p, 0) * 50px), 0);
 }
 
-.y01 .hero__mark {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: 16%;
-  translate: -50% 0;
-  font-family: var(--font-disp);
-  font-weight: 800;
-  font-size: clamp(6rem, 34vw, 20rem);
-  line-height: 0.8;
-  color: rgb(var(--rgb-venom) / 0.05);
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
-  transform: translate3d(0, calc(var(--p, 0) * -60px), 0);
-}
-
 .y01 .hero__inner {
   position: relative;
   z-index: 2;
@@ -448,13 +450,30 @@
   margin: 0;
 }
 
+/*
+ * Latin and Kannada set as one lockup, the way a Kannada title card sets a
+ * star's name — rather than the script exiled to a 0.05-alpha watermark behind
+ * a photograph, where it was the largest element on the page and invisible at
+ * every width. This is the one piece of the composition another star's page
+ * could not reuse unchanged.
+ */
 .y01 .hero__kn {
+  font-family: var(--font-kn);
+  font-weight: 600;
+  font-size: 0.58em;
+  /* Kannada is an abugida: tracking separates a consonant from its vowel sign. */
+  letter-spacing: 0;
+  color: var(--venom-pale);
+  white-space: nowrap;
+}
+
+.y01 .hero__birth {
   display: block;
-  margin-top: 0.65rem;
+  margin-top: 0.75rem;
   font-family: var(--font-txt);
-  font-size: clamp(1.1rem, 5vw, 1.7rem);
+  font-size: clamp(1.05rem, 4.6vw, 1.45rem);
   font-weight: 400;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: var(--txt-dim);
 }
 
@@ -466,12 +485,29 @@
   flex-wrap: wrap;
 }
 
+/*
+ * A painted strip, the way a hoarding sets a star's honorific: flat saturated
+ * block, dark letterforms knocked out of it. It replaces a cyan neon label —
+ * cyan being the tell the detector flagged twice as generic.
+ */
 .y01 .hero__epithet span:first-child {
   font-family: var(--font-disp);
-  font-weight: 700;
-  font-size: clamp(0.95rem, 3.6vw, 1.15rem);
-  letter-spacing: 0.3em;
+  font-weight: 800;
+  font-size: clamp(0.85rem, 3.2vw, 1.05rem);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  background: var(--venom);
+  color: var(--ink-950);
+  padding: 0.32em 0.72em 0.28em;
+  text-shadow: none;
+}
+
+.y01 .hero__epithet [lang="kn"] {
+  font-family: var(--font-kn);
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--venom-pale);
 }
 
 .y01 .hero__meta {
@@ -537,30 +573,37 @@
   }
 }
 
+/*
+ * Tablet portrait (768–1023) previously fell through to the phone rule and got
+ * a 384px photo floating dead-centre above a screen of empty gradient. The
+ * portrait moves and grows here, one breakpoint earlier than the inscription.
+ */
+@media (min-width: 48rem) {
+  .y01 .hero__portrait {
+    place-items: center end;
+    padding-right: 4%;
+  }
+  .y01 .hero__portrait img {
+    width: min(56vw, 30rem);
+    opacity: 0.76;
+    /* Anchored right, so only the inboard edge needs resolving. */
+    mask-image:
+      linear-gradient(180deg, transparent 0%, #000 14%, #000 74%, transparent 99%),
+      linear-gradient(90deg, transparent 0%, #000 22%, #000 100%);
+    mask-composite: intersect;
+  }
+}
+
 @media (min-width: 64rem) {
   .y01 .hero__inner {
     padding-block: 4rem 6rem;
   }
   .y01 .hero__portrait {
-    place-items: center end;
     padding-right: 6%;
   }
   .y01 .hero__portrait img {
     width: min(40vw, 32rem);
     opacity: 0.78;
-    mask-image: linear-gradient(
-      180deg,
-      transparent 0%,
-      #000 14%,
-      #000 74%,
-      transparent 99%
-    );
-  }
-  .y01 .hero__mark {
-    left: auto;
-    right: 3%;
-    translate: 0 0;
-    font-size: clamp(10rem, 20vw, 22rem);
   }
 }
 
@@ -608,13 +651,6 @@
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--magenta-pale);
-}
-
-.y01 .banner__line {
-  margin-top: 1.5rem;
-  max-width: 44ch;
-  font-weight: 300;
-  color: var(--txt-dim);
 }
 
 .y01 .banner__strip {
@@ -792,8 +828,10 @@
     rgb(var(--rgb-venom) / 0.07),
     transparent 55%
   );
-  padding-inline: 1rem;
-  margin-inline: -1rem;
+  /* Bleeds to the true page gutter. Hard-coded 1rem against a 1.25rem gutter
+     left the two most important rows 4px off every other row on the phone. */
+  padding-inline: var(--pad);
+  margin-inline: calc(var(--pad) * -1);
 }
 .y01 .film[data-tier="landmark"] .film__title {
   font-size: 1.4rem;
@@ -862,11 +900,17 @@
   height: 100%;
   object-fit: cover;
   filter: grayscale(0.5) contrast(1.08) brightness(0.82);
-  transition: filter 0.5s var(--ease-out);
+  transition: filter 0.9s var(--ease-out);
 }
 
-.y01 .plate:hover img {
-  filter: grayscale(0) contrast(1.05) brightness(0.95);
+/*
+ * The recolour rides the reveal rather than :hover. On the phone this page is
+ * built for, hover never fires — so every photograph stayed permanently
+ * desaturated for the primary visitor, in the one section that exists to let
+ * them look at him.
+ */
+.y01 .plate[data-lit="true"] img {
+  filter: grayscale(0) contrast(1.04) brightness(0.98);
 }
 
 .y01 .plate::after {
@@ -876,8 +920,10 @@
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    transparent 55%,
-    rgb(4 5 10 / 0.55) 100%
+    transparent 30%,
+    rgb(4 5 10 / 0.35) 55%,
+    rgb(4 5 10 / 0.9) 86%,
+    rgb(4 5 10 / 0.95) 100%
   );
 }
 
@@ -951,23 +997,47 @@
   margin-top: 3.5rem;
 }
 
+/*
+ * Real headings, not eyebrow labels floating above content. They also put the
+ * Toxic sub-blocks into the document outline, which previously ran one h2 over
+ * five unlabelled regions.
+ */
+.y01 .block-title {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--magenta-pale);
+  margin-bottom: 0.25rem;
+}
+
 /* --- dual role */
 
+/*
+ * One framed object divided in two, not two cards that only become a pair at
+ * 48rem. "One actor, two parts" is the idea of the section, and it has to land
+ * on the phone, which is where the page is actually read.
+ */
 .y01 .roles {
   margin-top: 1.5rem;
   display: grid;
-  gap: 1rem;
+  gap: 0;
+  border: 1px solid rgb(var(--rgb-magenta) / 0.24);
 }
 
 .y01 .role {
   position: relative;
   padding: 1.5rem;
-  border: 1px solid rgb(var(--rgb-magenta) / 0.2);
   background: linear-gradient(
     160deg,
     rgb(var(--rgb-magenta) / 0.06),
     transparent 70%
   );
+}
+
+.y01 .role + .role {
+  border-top: 1px solid rgb(var(--rgb-magenta) / 0.24);
 }
 
 .y01 .role__name {
@@ -996,7 +1066,10 @@
 @media (min-width: 48rem) {
   .y01 .roles {
     grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+  }
+  .y01 .role + .role {
+    border-top: 0;
+    border-left: 1px solid rgb(var(--rgb-magenta) / 0.24);
   }
 }
 
@@ -1005,7 +1078,9 @@
 .y01 .scale {
   margin-top: 1.5rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* One column on the narrowest phones: at two columns the film's headline
+     budget broke across three lines as ₹850- / 1,000 / cr. */
+  grid-template-columns: 1fr;
   gap: 1px;
   background: var(--ink-700);
   border: 1px solid var(--ink-700);
@@ -1019,8 +1094,9 @@
 .y01 .scale dt {
   font-family: var(--font-disp);
   font-weight: 800;
-  font-size: clamp(1.25rem, 6vw, 1.9rem);
+  font-size: clamp(1.15rem, 5.2vw, 1.9rem);
   line-height: 1;
+  white-space: nowrap;
   color: var(--venom);
   text-shadow: 0 0 20px rgb(var(--rgb-venom) / 0.25);
 }
@@ -1038,6 +1114,12 @@
   font-size: 0.9375rem;
   font-weight: 300;
   color: var(--txt-dim);
+}
+
+@media (min-width: 30rem) {
+  .y01 .scale {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (min-width: 64rem) {
@@ -1163,13 +1245,25 @@
   border-top: 1px solid var(--ink-700);
 }
 
+/*
+ * Label over value on the phone. A fixed 8.5rem label column took 41% of a
+ * 375px width for one-word labels and squeezed the soundtrack credit into
+ * eleven lines.
+ */
 .y01 .slate div {
   display: grid;
-  grid-template-columns: 8.5rem 1fr;
-  gap: 1rem;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
   padding-block: 0.85rem;
   border-bottom: 1px solid var(--ink-700);
-  align-items: baseline;
+}
+
+@media (min-width: 48rem) {
+  .y01 .slate div {
+    grid-template-columns: 8.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
 }
 
 .y01 .slate dt {
@@ -1181,6 +1275,9 @@
 
 .y01 .slate dd {
   margin: 0;
+  /* Capped like every other prose block on the page; uncapped it ran to a
+     130-character measure at 1280. */
+  max-width: 62ch;
   font-size: 0.9375rem;
   color: var(--txt);
 }
@@ -1259,7 +1356,6 @@
   .y01 .hero__stage,
   .y01 .hero__portrait,
   .y01 .hero__glow,
-  .y01 .hero__mark,
   .y01 .hero__horizon,
   .y01 .plate {
     transform: none;

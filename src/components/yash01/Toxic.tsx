@@ -26,26 +26,24 @@ export default function Toxic() {
       aria-labelledby="toxic-title"
     >
       <div className="shell">
-        <p className="eyebrow lit">{toxic.releaseDate}</p>
-
-        <h2 id="toxic-title" className="toxic__word n-magenta lit tube" data-lit-index="1">
+        <h2 id="toxic-title" className="toxic__word n-magenta lit tube">
           {toxic.title}
         </h2>
-        <p className="toxic__sub lit" data-lit-index="2">
+        <p className="toxic__sub lit" data-lit-index="1">
           {toxic.subtitle}
         </p>
 
-        <p className="toxic__premise lit" data-lit-index="3">
+        <p className="toxic__premise lit" data-lit-index="2">
           {toxic.premise}
         </p>
 
         {/* --- the dual role */}
         <div className="toxic__block">
-          <p className="eyebrow lit">One actor, two parts</p>
+          <h3 className="block-title lit">One actor, two parts</h3>
           <div className="roles">
             {toxicRoles.map((r, i) => (
               <article className="role lit" data-lit-index={i} key={r.name}>
-                <h3 className="role__name">{r.name}</h3>
+                <h4 className="role__name">{r.name}</h4>
                 {"alias" in r && r.alias ? (
                   <p className="role__alias">Alias &ldquo;{r.alias}&rdquo;</p>
                 ) : null}
@@ -57,7 +55,7 @@ export default function Toxic() {
 
         {/* --- what it took */}
         <div className="toxic__block">
-          <p className="eyebrow lit">The scale of it</p>
+          <h3 className="block-title lit">The scale of it</h3>
           <dl className="scale">
             {toxicScale.map((s, i) => (
               <div className="lit" data-lit-index={i} key={s.label}>
@@ -71,7 +69,7 @@ export default function Toxic() {
 
         {/* --- cast */}
         <div className="toxic__block">
-          <p className="eyebrow lit">Alongside</p>
+          <h3 className="block-title lit">Alongside</h3>
           <ul className="cast">
             {toxicCast.map((c, i) => (
               <li className="lit" data-lit-index={Math.min(i, 5)} key={c.actor}>
@@ -85,12 +83,12 @@ export default function Toxic() {
 
         {/* --- how it got here */}
         <div className="toxic__block">
-          <p className="eyebrow lit">From announcement to release</p>
+          <h3 className="block-title lit">From announcement to release</h3>
           <div className="track">
             {toxicTimeline.map((t, i) => (
               <article className="stop lit" data-lit-index={Math.min(i, 5)} key={t.date}>
                 <p className="stop__date">{t.date}</p>
-                <h3 className="stop__title">{t.title}</h3>
+                <h4 className="stop__title">{t.title}</h4>
                 <p className="stop__body">{t.body}</p>
               </article>
             ))}
@@ -99,7 +97,7 @@ export default function Toxic() {
 
         {/* --- the slate */}
         <div className="toxic__block">
-          <p className="eyebrow lit">Credits</p>
+          <h3 className="block-title lit">Credits</h3>
           <dl className="slate lit" data-lit-index="1">
             <div>
               <dt>Director</dt>

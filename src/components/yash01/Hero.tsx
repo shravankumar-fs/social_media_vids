@@ -1,25 +1,32 @@
 "use client";
 
 import Image from "next/image";
+import { useCallback } from "react";
 import { identity } from "@/data/yash";
 import { useParallax, usePointerTilt } from "@/lib/scroll";
 import { useReveal } from "@/lib/reveal";
 
 export default function Hero() {
-  /*
-   * Two custom-property writers, one per element rather than one merged ref:
-   * the tilt writes --tx/--ty on the header, and every layer below inherits
-   * them; the parallax writes --p on the stage, which is the only subtree that
-   * reads it. Sharing a single element would mean assigning to a ref a hook
-   * returned, which React 19 does not allow.
-   */
-  const { ref: shell } = usePointerTilt(1);
-  const stage = useParallax<HTMLDivElement>(1);
+  const { ref: tiltRef } = usePointerTilt(1);
+  const parallaxRef = useParallax<HTMLElement>(1);
   const reveal = useReveal<HTMLDivElement>(0.1);
 
+  /*
+   * Both hooks write custom properties onto the same element — the tilt writes
+   * --tx/--ty, the parallax writes --p — and every layer below inherits them.
+   * One element, so one merged ref rather than a wrapper div per hook.
+   */
+  const stageRef = useCallback(
+    (el: HTMLElement | null) => {
+      tiltRef.current = el;
+      parallaxRef.current = el;
+    },
+    [tiltRef, parallaxRef],
+  );
+
   return (
-    <header className="hero grain" ref={shell}>
-      <div className="hero__stage" ref={stage} aria-hidden="true">
+    <header className="hero grain" ref={stageRef}>
+      <div className="hero__stage" aria-hidden="true">
         <div className="hero__glow hero__glow--a" />
         <div className="hero__glow hero__glow--b" />
         <div className="hero__portrait">
@@ -28,26 +35,33 @@ export default function Hero() {
             alt=""
             width={1693}
             height={2400}
-            sizes="(min-width: 64rem) 42vw, 96vw"
+            sizes="(min-width: 64rem) 40vw, (min-width: 48rem) 56vw, 90vw"
             priority
           />
         </div>
         <div className="hero__horizon" />
-        {/* Inside the stage because it is a depth layer and reads --p. */}
-        <p className="hero__mark">{identity.kannadaName}</p>
       </div>
 
       <div className="hero__inner shell" ref={reveal}>
-        <p className="eyebrow lit">{identity.industry}</p>
-
-        <h1 className="hero__name n-venom lit tube" data-lit-index="1">
-          {identity.stageName}
-          <span className="hero__kn">{identity.birthName}</span>
+        {/*
+          Latin and Kannada as one lockup. The script used to exist only as an
+          aria-hidden watermark, so it was announced nowhere and visible
+          nowhere; here it is part of the name and part of the accessible name.
+        */}
+        <h1 className="hero__name n-venom lit tube">
+          {identity.stageName}{" "}
+          <span className="hero__kn" lang="kn">
+            {identity.kannadaName}
+          </span>
         </h1>
 
+        <p className="hero__birth lit" data-lit-index="1">
+          {identity.birthName}
+        </p>
+
         <p className="hero__epithet lit" data-lit-index="2">
-          <span className="n-cyan">{identity.epithet}</span>
-          <span className="eyebrow">{identity.epithetKannada}</span>
+          <span>{identity.epithet}</span>{" "}
+          <span lang="kn">{identity.epithetKannada}</span>
         </p>
 
         <p className="hero__meta lit" data-lit-index="3">

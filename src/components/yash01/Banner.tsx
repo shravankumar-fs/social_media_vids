@@ -15,25 +15,27 @@ export default function Banner() {
   const days = useDaysUntil(toxic.releaseISO);
 
   return (
-    <section className="banner grain" ref={reveal} aria-labelledby="banner-title">
+    <section
+      className="banner grain"
+      ref={reveal}
+      aria-label={`${toxic.title} — in cinemas ${toxic.releaseDate}`}
+    >
       <div className="banner__scan" aria-hidden="true" />
 
       <div className="shell">
-        <p className="eyebrow lit">In cinemas next</p>
+        {/*
+          A display lockup, not a section heading. As an <h2> it put a second
+          "Toxic" into the outline and a second identically-named region into
+          the landmark list, so the two were indistinguishable to anyone
+          navigating by structure. The section below owns the heading.
+        */}
+        <p className="banner__word n-magenta lit tube">{toxic.title}</p>
 
-        <h2 id="banner-title" className="banner__word n-magenta lit tube" data-lit-index="1">
-          {toxic.title}
-        </h2>
-
-        <p className="banner__sub lit" data-lit-index="2">
+        <p className="banner__sub lit" data-lit-index="1">
           {toxic.subtitle}
         </p>
 
-        <p className="banner__line lit" data-lit-index="3">
-          {toxic.tagline}
-        </p>
-
-        <div className="banner__strip lit" data-lit-index="4">
+        <div className="banner__strip lit" data-lit-index="2">
           <span className="banner__date">{toxic.releaseDate}</span>
           <span className="banner__count">
             {days === null
