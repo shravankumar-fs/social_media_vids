@@ -1,0 +1,1243 @@
+/* ===========================================================================
+   /celebs/toxic01 — TOXIC (2026)
+
+   THESIS: not the neon poster page. The film is a gangster picture set in
+   post-independence Goa between the 1940s and the 1970s, so the page is lit
+   the way that world is lit — brass lamplight, tarnished metal, sea-verdigris
+   and bone paper on a warm black. /celebs/yash_01 owns venom green and
+   magenta; nothing here borrows either.
+
+   MOBILE FIRST: every base rule in this file is the phone. Media queries only
+   ever add. Nothing below 640px is a scaled-down desktop layout.
+
+   SCOPING CONTRACT: every selector is nested under `.tx01`. Next.js does not
+   remove route stylesheets on client navigation, so a bare selector here
+   would still be live on /celebs/yash_01 and would repaint it. Do not add one.
+   =========================================================================== */
+
+.tx01 {
+  /* --- Ground. Warm black. Brown undertone, never blue, never neutral. */
+  --n-950: #070504;
+  --n-900: #0d0a08;
+  --n-850: #12100c;
+  --n-800: #1a1611;
+  --n-700: #241f18;
+  --n-600: #322b21;
+  --n-500: #463d2f;
+
+  /* --- Text on --n-900. --ink-mute is the floor: 5.1:1, measured. */
+  --ink: #f4efe4;
+  --ink-dim: #b3a894;
+  --ink-mute: #8a806f;
+
+  /* --- Brass. The page's one carrying colour: lamplight on worn metal. */
+  --brass-100: #f8e6c2;
+  --brass-200: #f0cf93;
+  --brass-400: #e0a54a;
+  --brass-500: #c98b34;
+  --brass-700: #8a5c1f;
+
+  /* --- Two supports, used sparingly, never together in the same block. */
+  --rust: #d9573f;     /* danger, violence, the release counter */
+  --verdigris: #5fa89b; /* the sea, the coast, anything cool */
+
+  --rgb-brass: 224 165 74;
+  --rgb-rust: 217 87 63;
+  --rgb-verd: 95 168 155;
+
+  /* Plex trails Anton in the display stack so ₹ (U+20B9), which Anton does
+     not carry, falls to the face already setting the digits beside it. */
+  --font-disp: var(--font-anton), var(--font-plex), sans-serif;
+  --font-txt: var(--font-plex), system-ui, sans-serif;
+  --font-kn: var(--font-kannada-tx), var(--font-plex), sans-serif;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.33, 0.9, 0.24, 1);
+
+  /* --pad is the gutter. --stack is the air between blocks, and it is the
+     single most load-bearing value on this page: the brief asked for space
+     between blocks, and this is where that lives. */
+  --pad: 1.375rem;
+  --stack: 5.5rem;
+  --shell: 74rem;
+  /* The sticky bar is part of the first screen, so the hero has to subtract
+     it. Measured, not guessed: 0.75rem padding either side of a 1.0625rem
+     cap line. Kept as a token because the hero's min-height reads it. */
+  --topbar-h: 3.375rem;
+
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+  background: var(--n-900);
+  color: var(--ink);
+  font-family: var(--font-txt);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 40rem) {
+  .tx01 {
+    --pad: 2rem;
+    --stack: 7rem;
+  }
+}
+@media (min-width: 64rem) {
+  .tx01 {
+    --pad: 3.5rem;
+    --stack: 9.5rem;
+  }
+}
+
+.tx01 ::selection {
+  background: var(--brass-400);
+  color: var(--n-950);
+}
+.tx01 :focus-visible {
+  outline: 2px solid var(--brass-400);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.tx01 a {
+  color: var(--brass-200);
+  text-decoration-color: rgb(var(--rgb-brass) / 0.45);
+  text-underline-offset: 0.22em;
+  transition: color 0.28s var(--ease-soft);
+}
+.tx01 a:hover {
+  color: var(--brass-400);
+}
+
+.tx01 img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Preflight already zeroes these. Repeated locally because the definition
+   lists on this page are load-bearing layout, and a `dd` that quietly
+   reacquires its 40px indent breaks three sections at once. */
+.tx01 dl,
+.tx01 dd,
+.tx01 dt,
+.tx01 figure {
+  margin: 0;
+}
+
+/* ============================================================== materials */
+
+/*
+ * Grain. Brass light on a flat digital black reads as a CSS gradient; the
+ * same light over grain reads as film. Texture, never pattern.
+ */
+.tx01 .grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.13;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* Display lockups: bone at the top edge, burnished brass at the foot, as if
+   lit from above. Clipped to the glyphs, so the depth has to come from
+   drop-shadow — text-shadow paints behind transparent text and shows through. */
+.tx01 .plate {
+  font-family: var(--font-disp);
+  font-weight: 400;
+  background: linear-gradient(
+    177deg,
+    var(--ink) 4%,
+    var(--brass-100) 34%,
+    var(--brass-400) 68%,
+    var(--brass-700) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 14px rgb(var(--rgb-brass) / 0.22))
+    drop-shadow(0 1px 0 rgb(0 0 0 / 0.55));
+}
+
+/* A lit hairline. The rule, plus the light it throws either side of itself. */
+.tx01 .hair {
+  position: relative;
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--rgb-brass) / 0.55) 18%,
+    rgb(var(--rgb-brass) / 0.55) 82%,
+    transparent
+  );
+}
+
+/* =================================================================== arrows
+
+   The brief asked for a subtle arrow that arrives in the background as the
+   page scrolls. It is one motif used three ways, all of them aria-hidden:
+
+   1. .arrowfield — oversized chevrons behind each band, drifting against the
+      scroll and blooming as the band crosses the middle of the screen.
+   2. .seam       — the divider between two bands, a hairline with a single
+      chevron sitting on it, brightening on approach.
+   3. .hero__cue  — the same chevron, small, at the foot of the first screen.
+
+   All three read `--p` (0..1, the band's progress across the viewport) and
+   `--pc` (-1..1, the same value centred), written once per frame by the one
+   rAF loop in lib/scroll.ts. The opacity curve is 4p(1-p): a parabola that is
+   0 at both edges and 1 dead centre, expressed in plain multiplication so it
+   needs no abs() and no keyframes.
+
+   The peaks below top out at 0.055 and the strokes are hairlines. Both were
+   cut roughly in half after looking at the rendered page: the motif is meant
+   to be felt at the edge of attention, and anything heavier turns three
+   background marks into three foreground graphics.
+   ------------------------------------------------------------------------- */
+
+.tx01 .arrowfield {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.tx01 .arrowfield__mark {
+  position: absolute;
+  left: 50%;
+  width: min(96vw, 46rem);
+  color: var(--brass-400);
+  opacity: calc(
+    var(--peak, 0.05) * 4 * var(--p, 0) * (1 - var(--p, 0))
+  );
+  transform: translate3d(-50%, calc(var(--pc, 0) * var(--drift, -16vh)), 0);
+  will-change: transform, opacity;
+}
+.tx01 .arrowfield__mark svg {
+  width: 100%;
+  height: auto;
+}
+
+.tx01 .arrowfield__mark--a {
+  top: 6%;
+  --peak: 0.055;
+  --drift: -18vh;
+}
+.tx01 .arrowfield__mark--b {
+  top: 44%;
+  width: min(70vw, 30rem);
+  --peak: 0.035;
+  --drift: -9vh;
+}
+.tx01 .arrowfield__mark--c {
+  top: 74%;
+  width: min(48vw, 20rem);
+  --peak: 0.025;
+  --drift: -4vh;
+}
+
+/* The seam between two bands. Sits in the gap, not inside either block. */
+.tx01 .seam {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 0;
+  pointer-events: none;
+}
+.tx01 .seam::before {
+  content: "";
+  position: absolute;
+  inset-inline: var(--pad);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--rgb-brass) / 0.22) 30%,
+    rgb(var(--rgb-brass) / 0.22) 70%,
+    transparent
+  );
+}
+.tx01 .seam__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--n-900);
+  color: var(--brass-400);
+  opacity: calc(0.25 + 0.6 * 4 * var(--p, 0) * (1 - var(--p, 0)));
+  transform: translate3d(0, calc(var(--pc, 0) * -1.1rem), 0);
+}
+.tx01 .seam__mark svg {
+  width: 0.9rem;
+  height: auto;
+}
+
+/* ===================================================================== type */
+
+.tx01 .eyebrow {
+  /* 11px floor. Never smaller, anywhere on this page. */
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  line-height: 1.5;
+}
+
+.tx01 .lede {
+  font-size: clamp(1.0625rem, 1rem + 0.9vw, 1.375rem);
+  font-weight: 300;
+  line-height: 1.62;
+  color: var(--ink-dim);
+  max-width: 40ch;
+  text-wrap: pretty;
+}
+
+.tx01 .body {
+  font-size: 1rem;
+  color: var(--ink-dim);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+/* ================================================================== layout */
+
+.tx01 .shell {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+/* One band per numbered section. The padding here is the air between blocks. */
+.tx01 .band {
+  position: relative;
+  padding-block: var(--stack);
+  isolation: isolate;
+}
+
+.tx01 .band__head {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+@media (min-width: 40rem) {
+  .tx01 .band__head {
+    margin-bottom: 3.5rem;
+  }
+}
+
+.tx01 .band__index {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+.tx01 .band__num {
+  font-family: var(--font-disp);
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  color: var(--brass-400);
+}
+.tx01 .band__title {
+  font-family: var(--font-disp);
+  font-weight: 400;
+  font-size: clamp(1.875rem, 1.35rem + 2.9vw, 3.25rem);
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.tx01 .band__note {
+  font-size: 0.9375rem;
+  color: var(--ink-mute);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+/* ================================================================== reveal */
+
+/*
+ * Every `.lit` element is legible before it animates — this only ever moves
+ * and fades it in. useReveal in lib/reveal.ts stamps data-lit="true" once, and
+ * hands reduced-motion users the finished state immediately.
+ */
+.tx01 .lit {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 0.72s var(--ease),
+    transform 0.72s var(--ease);
+}
+.tx01 .lit[data-lit="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ================================================================== topbar */
+
+.tx01 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem var(--pad);
+  background: rgb(13 10 8 / 0.9);
+  backdrop-filter: blur(16px) saturate(1.25);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border-bottom: 1px solid rgb(var(--rgb-brass) / 0.13);
+}
+.tx01 .topbar__mark {
+  font-family: var(--font-disp);
+  font-size: 1.0625rem;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+.tx01 .topbar__mark span {
+  color: var(--brass-400);
+}
+.tx01 .topbar__date {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* The progress hairline. Width is the only thing that changes, and it is
+   written straight to a custom property by the scroll listener. */
+.tx01 .topbar__rail {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: calc(var(--read, 0) * 100%);
+  background: linear-gradient(90deg, var(--brass-700), var(--brass-400));
+}
+
+/* ==================================================================== hero */
+
+.tx01 .hero {
+  position: relative;
+  min-height: calc(100svh - var(--topbar-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding-bottom: 3.5rem;
+  /* perspective on the section, so the plates inside actually have depth
+     rather than a flat scale that only looks like it. */
+  perspective: 1100px;
+}
+
+.tx01 .hero__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform-style: preserve-3d;
+}
+
+.tx01 .hero__portrait {
+  position: absolute;
+  /* On the phone the frame is tall and the face has to clear the type, so the
+     plate is anchored to the top and the copy sits under it. */
+  inset: -6% -8% auto -8%;
+  height: 82%;
+  transform: translate3d(
+      calc(var(--tx, 0) * -8px),
+      calc(var(--ty, 0) * -6px + var(--p, 0) * 6vh),
+      0
+    )
+    rotateY(calc(var(--tx, 0) * 2.4deg))
+    rotateX(calc(var(--ty, 0) * -1.6deg))
+    scale(1.04);
+  transition: transform 0.05s linear;
+}
+.tx01 .hero__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: saturate(0.82) contrast(1.08) brightness(0.9);
+}
+
+/* The portrait is a photograph of a man in front of warm bulbs; these two
+   washes push that light out into the page so the type sits inside it. */
+.tx01 .hero__wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tx01 .hero__wash--brass {
+  background: radial-gradient(
+    62% 44% at 50% 28%,
+    rgb(var(--rgb-brass) / 0.26),
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  transform: translate3d(
+    calc(var(--tx, 0) * 14px),
+    calc(var(--ty, 0) * 10px),
+    0
+  );
+}
+/* The floor the title stands on. Without this the type sits on the beard. */
+/*
+ * The floor the title stands on, and the single most important rule in this
+ * file. The portrait is a lit face on a warm background; without this the
+ * display type sat straight on the beard at half strength and the kicker was
+ * unreadable. It goes fully opaque well above the first line of type, so
+ * everything below the chin is set on flat ground rather than on a photograph.
+ */
+.tx01 .hero__wash--floor {
+  background:
+    radial-gradient(
+      120% 70% at 50% 26%,
+      transparent 40%,
+      rgb(7 5 4 / 0.5) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgb(13 10 8 / 0.12) 26%,
+      rgb(13 10 8 / 0.55) 40%,
+      rgb(13 10 8 / 0.88) 49%,
+      rgb(13 10 8 / 0.98) 56%,
+      var(--n-900) 62%
+    );
+}
+
+.tx01 .hero__inner {
+  position: relative;
+  z-index: 3;
+}
+
+.tx01 .hero__kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.85rem;
+  margin-bottom: 1rem;
+}
+.tx01 .hero__kn {
+  font-family: var(--font-kn);
+  font-size: 0.9375rem;
+  color: var(--brass-200);
+  letter-spacing: 0.02em;
+}
+
+.tx01 .hero__title {
+  font-size: clamp(4.25rem, 2rem + 19vw, 13rem);
+  line-height: 0.86;
+  letter-spacing: 0.005em;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+}
+
+.tx01 .hero__sub {
+  font-size: clamp(0.8125rem, 0.72rem + 0.5vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--brass-200);
+  margin: 0 0 1.25rem;
+}
+
+.tx01 .hero__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: rgb(var(--rgb-brass) / 0.16);
+  border: 1px solid rgb(var(--rgb-brass) / 0.16);
+  margin-bottom: 1.75rem;
+}
+.tx01 .hero__facts > div {
+  background: rgb(18 16 12 / 0.82);
+  padding: 0.7rem 0.95rem;
+  display: grid;
+  gap: 0.2rem;
+}
+.tx01 .hero__facts dd {
+  margin: 0;
+}
+.tx01 .hero__facts b {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.35;
+}
+@media (min-width: 40rem) {
+  .tx01 .hero__facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.tx01 .hero__cue {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink-mute);
+}
+.tx01 .hero__cue svg {
+  width: 0.8rem;
+  color: var(--brass-400);
+  animation: tx-nudge 2.6s var(--ease-soft) infinite;
+}
+@keyframes tx-nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  45% {
+    transform: translateY(5px);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 48rem) {
+  .tx01 .hero__portrait {
+    inset: 0 0 0 auto;
+    width: 58%;
+    height: 100%;
+    /* The plate is a bright rectangle butted against a black page, and no
+       amount of gradient painted *over* it removes its own left edge — that
+       edge was reading as a visible seam down the middle of the hero. Masking
+       the layer itself dissolves it into the ground instead. */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 0.35) 14%,
+      #000 40%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 0.35) 14%,
+      #000 40%
+    );
+  }
+  .tx01 .hero__portrait img {
+    object-position: 50% 18%;
+  }
+  /* On a wide frame the copy is beside the portrait, so the floor gradient
+     has to run sideways instead of only down, or the title loses its ground. */
+  .tx01 .hero__wash--floor {
+    background:
+      linear-gradient(to bottom, transparent 62%, rgb(13 10 8 / 0.85) 94%, var(--n-900)),
+      linear-gradient(
+        to right,
+        var(--n-900) 14%,
+        rgb(13 10 8 / 0.94) 36%,
+        rgb(13 10 8 / 0.45) 56%,
+        transparent 76%
+      );
+  }
+  .tx01 .hero__inner {
+    max-width: 62%;
+  }
+}
+
+/* Short phones: the hero was overrunning 667px and taking the cue with it. */
+@media (max-height: 700px) and (max-width: 48rem) {
+  .tx01 .hero {
+    padding-bottom: 2rem;
+  }
+  .tx01 .hero__facts {
+    display: none;
+  }
+  .tx01 .hero__title {
+    font-size: clamp(3.5rem, 15vw, 6rem);
+  }
+}
+
+/* ================================================================= premise */
+
+.tx01 .premise {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 56rem) {
+  .tx01 .premise {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 4rem;
+    align-items: start;
+  }
+}
+
+.tx01 .premise__quote {
+  font-family: var(--font-disp);
+  font-size: clamp(1.5rem, 1.1rem + 2vw, 2.5rem);
+  line-height: 1.16;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 1.5rem;
+  text-wrap: balance;
+}
+.tx01 .premise__quote em {
+  font-style: normal;
+  color: var(--brass-400);
+}
+
+/* A definition stack, not a card. Period title cards were set as lists. */
+.tx01 .spec {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid rgb(var(--rgb-brass) / 0.18);
+}
+.tx01 .spec > div {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 0.5rem 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgb(var(--rgb-brass) / 0.12);
+  align-items: baseline;
+}
+.tx01 .spec dt {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.tx01 .spec dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+@media (max-width: 30rem) {
+  .tx01 .spec > div {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+/* =================================================================== roles */
+
+.tx01 .roles {
+  display: grid;
+  gap: 1.25rem;
+  /* The two halves are tilted by one signal, so the pair turns together like
+     a single object rather than two independent widgets. */
+  perspective: 900px;
+}
+@media (min-width: 44rem) {
+  .tx01 .roles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+}
+
+.tx01 .role {
+  position: relative;
+  padding: 1.75rem 1.375rem 1.5rem;
+  background: linear-gradient(
+    165deg,
+    rgb(36 31 24 / 0.9),
+    rgb(13 10 8 / 0.92)
+  );
+  border: 1px solid rgb(var(--rgb-brass) / 0.2);
+  transform: rotateY(calc(var(--tx, 0) * var(--turn, 2.2deg)))
+    rotateX(calc(var(--ty, 0) * -1.4deg));
+  transform-style: preserve-3d;
+  transition: border-color 0.4s var(--ease-soft);
+}
+.tx01 .role:nth-child(2) {
+  /* Opposite sign, so the pair opens and closes like a diptych. */
+  --turn: -2.2deg;
+}
+.tx01 .role:hover {
+  border-color: rgb(var(--rgb-brass) / 0.42);
+}
+
+/* A registration bracket in the corner — the mark that sat on period title
+   cards. It is what keeps these two from reading as the same rounded
+   rectangle every film page ships.
+
+   Deliberately not a clip-path corner cut: clip-path flattens the 3D
+   rendering context, and this section's whole point is that the pair tilts. */
+.tx01 .role::after {
+  content: "";
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-top: 1px solid rgb(var(--rgb-brass) / 0.55);
+  border-right: 1px solid rgb(var(--rgb-brass) / 0.55);
+}
+
+.tx01 .role__idx {
+  font-family: var(--font-disp);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: var(--brass-500);
+  display: block;
+  margin-bottom: 0.6rem;
+}
+.tx01 .role__name {
+  font-family: var(--font-disp);
+  font-size: clamp(2.25rem, 1.6rem + 3.4vw, 3.5rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+  transform: translateZ(22px);
+}
+.tx01 .role__alias {
+  font-size: 0.8125rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass-200);
+  margin: 0.5rem 0 0;
+}
+.tx01 .role__note {
+  font-size: 0.9375rem;
+  color: var(--ink-dim);
+  margin: 0.9rem 0 0;
+  text-wrap: pretty;
+}
+
+/* =================================================================== scale */
+
+.tx01 .scale {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: rgb(var(--rgb-brass) / 0.15);
+  border: 1px solid rgb(var(--rgb-brass) / 0.15);
+  margin: 0;
+}
+.tx01 .scale > div {
+  background: var(--n-900);
+  padding: 1.375rem 1rem 1.25rem;
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+}
+.tx01 .scale dt {
+  font-family: var(--font-disp);
+  font-size: clamp(1.375rem, 0.95rem + 2.1vw, 2.5rem);
+  line-height: 1.04;
+  color: var(--brass-400);
+  letter-spacing: 0.01em;
+  /* "₹850–1,000 cr" is the longest figure here and it has to hold one line in
+     a two-up grid on a 375px screen, or the unit orphans onto a second. */
+  text-wrap: balance;
+}
+.tx01 .scale__label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0;
+}
+.tx01 .scale dd {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ink-dim);
+}
+@media (min-width: 52rem) {
+  .tx01 .scale {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ================================================================ ensemble */
+
+.tx01 .cast {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: rgb(var(--rgb-brass) / 0.13);
+  border-block: 1px solid rgb(var(--rgb-brass) / 0.13);
+}
+.tx01 .cast li {
+  background: var(--n-900);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.95rem;
+  padding: 0.95rem 0.25rem;
+}
+@media (min-width: 44rem) {
+  .tx01 .cast {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tx01 .cast li {
+    padding-inline: 1.125rem;
+  }
+}
+
+/*
+ * A monogram disc, not a headshot. There is no freely licensed photograph of
+ * any of these performers on Commons, and a stock face or a silhouette would
+ * be a fabrication — so the page sets initials and says so.
+ */
+.tx01 .cast__mono {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 1px solid rgb(var(--rgb-brass) / 0.35);
+  background: radial-gradient(
+    circle at 32% 28%,
+    rgb(var(--rgb-brass) / 0.14),
+    transparent 70%
+  );
+  font-family: var(--font-disp);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  color: var(--brass-200);
+}
+.tx01 .cast__who {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+.tx01 .cast__actor {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.tx01 .cast__role {
+  font-size: 0.8125rem;
+  color: var(--brass-200);
+}
+.tx01 .cast__note {
+  font-size: 0.8125rem;
+  font-style: normal;
+  color: var(--ink-mute);
+}
+
+/* ================================================================== making */
+
+/*
+ * A vertical track with the rail on the left. On the phone this is the only
+ * shape that works for seven dated entries — a horizontal scroller would hide
+ * six of them behind a gesture nobody is told about.
+ */
+.tx01 .track {
+  display: grid;
+  gap: 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+.tx01 .track::before {
+  content: "";
+  position: absolute;
+  left: 0.3125rem;
+  top: 0.55rem;
+  bottom: 0.55rem;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--rgb-brass) / 0.45),
+    rgb(var(--rgb-brass) / 0.12)
+  );
+}
+.tx01 .stop {
+  position: relative;
+  padding: 0 0 1.75rem;
+}
+.tx01 .stop:last-child {
+  padding-bottom: 0;
+}
+.tx01 .stop::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 0.5rem;
+  width: 0.6875rem;
+  height: 0.6875rem;
+  border-radius: 50%;
+  border: 1px solid var(--brass-500);
+  background: var(--n-900);
+}
+.tx01 .stop--last::before {
+  background: var(--brass-400);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-brass) / 0.18);
+}
+.tx01 .stop__date {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brass-400);
+  margin: 0;
+}
+.tx01 .stop__title {
+  font-family: var(--font-disp);
+  font-size: 1.1875rem;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0.3rem 0 0.35rem;
+  letter-spacing: 0.01em;
+}
+.tx01 .stop__body {
+  font-size: 0.9375rem;
+  color: var(--ink-dim);
+  margin: 0;
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+.tx01 .stop__figure {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgb(var(--rgb-rust) / 0.4);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+
+/* Two-column from 56rem, a single stack below it. The base case is the phone,
+   and it still needs the gap — without it the prose sat directly on the rail. */
+.tx01 .making {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 56rem) {
+  .tx01 .making {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+}
+
+/* ================================================================= release */
+
+.tx01 .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tx01 .chips li {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgb(var(--rgb-brass) / 0.28);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-200);
+}
+.tx01 .chips li[data-tone="cool"] {
+  border-color: rgb(var(--rgb-verd) / 0.32);
+  color: var(--verdigris);
+}
+
+/* The dates it was moved from. Struck through, because that is exactly what
+   happened to them, and the final one is not. */
+.tx01 .dates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+.tx01 .dates li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  font-size: 0.875rem;
+  color: var(--ink-mute);
+}
+.tx01 .dates b {
+  font-weight: 500;
+  text-decoration: line-through;
+  text-decoration-color: rgb(var(--rgb-rust) / 0.75);
+  white-space: nowrap;
+}
+.tx01 .dates li[data-final="true"] {
+  color: var(--ink);
+}
+.tx01 .dates li[data-final="true"] b {
+  text-decoration: none;
+  color: var(--brass-400);
+}
+
+.tx01 .rights {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.tx01 .rights th {
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  padding: 0 0 0.65rem;
+  border-bottom: 1px solid rgb(var(--rgb-brass) / 0.22);
+}
+.tx01 .rights td {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgb(var(--rgb-brass) / 0.1);
+  vertical-align: top;
+  color: var(--ink-dim);
+}
+.tx01 .rights td:first-child {
+  color: var(--ink);
+  padding-right: 1rem;
+}
+.tx01 .rights td:last-child {
+  text-align: right;
+  color: var(--brass-200);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* Narrow phones cannot hold three columns of prose. The buyer moves under
+   the region rather than wrapping to one word per line. */
+@media (max-width: 34rem) {
+  .tx01 .rights,
+  .tx01 .rights tbody,
+  .tx01 .rights tr,
+  .tx01 .rights td {
+    display: block;
+    width: 100%;
+  }
+  .tx01 .rights thead {
+    display: none;
+  }
+  .tx01 .rights tr {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgb(var(--rgb-brass) / 0.1);
+  }
+  .tx01 .rights td {
+    border: 0;
+    padding: 0;
+  }
+  .tx01 .rights td:last-child {
+    text-align: left;
+    margin-top: 0.2rem;
+  }
+  .tx01 .rights td[data-empty="true"] {
+    display: none;
+  }
+}
+
+/* The payoff. The most affecting thing this page owns is how close the film
+   is, so it ends the page rather than sitting in a table cell. */
+.tx01 .countdown {
+  text-align: center;
+  /* Asymmetric on purpose: the band's own --stack already supplies the air
+     underneath, so an even padding here left the figure crowded against the
+     last row of the table above it and adrift from the footer below. */
+  padding-block: 3.25rem 0.5rem;
+}
+.tx01 .countdown__num {
+  font-family: var(--font-disp);
+  font-size: clamp(4rem, 2rem + 17vw, 11rem);
+  line-height: 0.9;
+  color: var(--rust);
+  margin: 0;
+  letter-spacing: 0.01em;
+  text-shadow:
+    0 0 24px rgb(var(--rgb-rust) / 0.28),
+    0 0 70px rgb(var(--rgb-rust) / 0.14);
+  /* Reserves the line before the client-side count lands, so the block below
+     does not jump on hydration. */
+  min-height: 0.9em;
+}
+.tx01 .countdown__sub {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin: 0.85rem 0 0;
+}
+
+/* ================================================================ colophon */
+
+.tx01 .colophon {
+  position: relative;
+  padding: 3.5rem 0 4rem;
+  border-top: 1px solid rgb(var(--rgb-brass) / 0.16);
+  background: var(--n-950);
+}
+.tx01 .colophon__grid {
+  display: grid;
+  gap: 2rem;
+}
+@media (min-width: 44rem) {
+  .tx01 .colophon__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem;
+  }
+}
+.tx01 .colophon h2 {
+  font-family: var(--font-disp);
+  font-size: 0.75rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 0.85rem;
+}
+.tx01 .colophon p {
+  font-size: 0.875rem;
+  color: var(--ink-dim);
+  margin: 0 0 0.6rem;
+  max-width: 54ch;
+}
+.tx01 .colophon__foot {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(var(--rgb-brass) / 0.1);
+  font-size: 0.75rem;
+  color: var(--ink-mute);
+}
+
+/* ========================================================= reduced motion */
+
+/*
+ * The hooks in lib/scroll.ts and lib/reveal.ts already opt out of their rAF
+ * loops and hand back resting values, so this only has to stop the two
+ * animations authored in CSS. It must not hide anything.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .tx01 *,
+  .tx01 *::before,
+  .tx01 *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .tx01 .lit {
+    opacity: 1;
+    transform: none;
+  }
+  .tx01 .hero__portrait,
+  .tx01 .role,
+  .tx01 .arrowfield__mark,
+  .tx01 .seam__mark {
+    transform: none;
+  }
+}

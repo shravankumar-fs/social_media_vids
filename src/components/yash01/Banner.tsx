@@ -31,11 +31,7 @@ export default function Banner() {
         */}
         <p className="banner__word n-magenta lit tube">{toxic.title}</p>
 
-        <p className="banner__sub lit" data-lit-index="1">
-          {toxic.subtitle}
-        </p>
-
-        <div className="banner__strip lit" data-lit-index="2">
+        <div className="banner__strip lit" data-lit-index="1">
           <span className="banner__date">{toxic.releaseDate}</span>
           <span className="banner__count">
             {days === null

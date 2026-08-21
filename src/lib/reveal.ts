@@ -18,22 +18,34 @@ import { useRef } from "react";
  * already legible in its unlit state, and arriving turns the tube on. It never
  * runs twice — each target is unobserved as it fires.
  */
-export function useReveal<T extends HTMLElement = HTMLDivElement>(
-  threshold = 0.15,
+type RevealOpts = {
+  /** Class marking an element that should reveal. */
+  cls: string;
+  /** Attribute set on it once it has. */
+  attr: string;
+  /** dataset key carrying a stagger index. */
+  indexKey: string;
+  /** ms per stagger step. */
+  step: number;
+};
+
+function useRevealBase<T extends HTMLElement>(
+  threshold: number,
+  { cls, attr, indexKey, step }: RevealOpts,
 ) {
   const ref = useRef<T>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const targets = el.matches(".lit")
-      ? [el, ...el.querySelectorAll<HTMLElement>(".lit")]
-      : Array.from(el.querySelectorAll<HTMLElement>(".lit"));
+    const targets = el.matches(`.${cls}`)
+      ? [el, ...el.querySelectorAll<HTMLElement>(`.${cls}`)]
+      : Array.from(el.querySelectorAll<HTMLElement>(`.${cls}`));
     if (targets.length === 0) return;
 
     // Reduced motion gets the final state, never a held-back one.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      targets.forEach((t) => t.setAttribute("data-lit", "true"));
+      targets.forEach((t) => t.setAttribute(attr, "true"));
       return;
     }
 
@@ -42,8 +54,8 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
         entries.forEach((e) => {
           if (!e.isIntersecting) return;
           const t = e.target as HTMLElement;
-          const stagger = Number(t.dataset.litIndex ?? 0) * 85;
-          window.setTimeout(() => t.setAttribute("data-lit", "true"), stagger);
+          const stagger = Number(t.dataset[indexKey] ?? 0) * step;
+          window.setTimeout(() => t.setAttribute(attr, "true"), stagger);
           io.unobserve(t);
         });
       },
@@ -51,9 +63,33 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
     );
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
-  }, [threshold]);
+  }, [threshold, cls, attr, indexKey, step]);
 
   return ref;
+}
+
+/** /celebs/yash_01 — a neon tube striking. Behaviour unchanged. */
+export function useReveal<T extends HTMLElement = HTMLDivElement>(
+  threshold = 0.15,
+) {
+  return useRevealBase<T>(threshold, {
+    cls: "lit",
+    attr: "data-lit",
+    indexKey: "litIndex",
+    step: 85,
+  });
+}
+
+/** /celebs/toxic02 — elements lift and warm as they arrive. */
+export function useRise<T extends HTMLElement = HTMLDivElement>(
+  threshold = 0.12,
+) {
+  return useRevealBase<T>(threshold, {
+    cls: "rise",
+    attr: "data-in",
+    indexKey: "riseIndex",
+    step: 90,
+  });
 }
 
 /**

@@ -58,6 +58,19 @@
   font-size: 1rem;
 }
 
+/* iPhone SE / 8 class: the hero overran 667px and took the scroll cue with it. */
+@media (max-height: 700px) {
+  .y01 .hero__inner {
+    padding-block: 2rem 2.5rem;
+  }
+  .y01 .hero__meta {
+    display: none;
+  }
+  .y01 .hero__facts {
+    margin-top: 1rem;
+  }
+}
+
 @media (min-width: 48rem) {
   .y01 {
     --pad: 2.5rem;
@@ -102,7 +115,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 3;
+  /* Below the type, above the ground. At z-index 3 it was applying noise to
+     every glyph in the hero and banner, not just the surface behind them. */
+  z-index: 1;
   pointer-events: none;
   opacity: 0.14;
   mix-blend-mode: overlay;
@@ -228,9 +243,15 @@
  * 5.1:1 while still unlit, so the reveal never trades legibility for effect.
  */
 @media (scripting: enabled) {
+  /*
+   * Filter only — deliberately no opacity. Group opacity on a .lit container
+   * composites its descendants with it, so an 11px label nested inside one
+   * cannot be exempted: the mute tier measured 3.58:1 while unlit, under the
+   * 4.5:1 floor, for ~1.2s as it entered view. Desaturating carries the same
+   * "unlit tube" reading and leaves alpha alone, so every tier stays legible.
+   */
   .y01 .lit {
-    opacity: 0.78;
-    filter: saturate(0.4) brightness(0.95);
+    filter: saturate(0.15) brightness(0.95);
   }
 
   /*
@@ -546,6 +567,12 @@
 .y01 .hero__cue {
   position: relative;
   z-index: 2;
+  /* .shell sets margin-inline:auto; without a width the flex box shrink-wraps
+     and those auto margins centre it, against every other element at the
+     gutter. An explicit width fixes that but cancels the grid item's default
+     stretch, so it needs justify-self back. */
+  width: 100%;
+  justify-self: center;
   display: flex;
   align-items: center;
   gap: 0.7rem;
@@ -632,6 +659,13 @@
       transparent 60%
     ),
     var(--ink-950);
+}
+
+/* Lifts the grained sections' content above the grain layer. */
+.y01 .banner .shell,
+.y01 .toxic .shell {
+  position: relative;
+  z-index: 2;
 }
 
 .y01 .banner__word {
@@ -867,10 +901,15 @@
 
 /* ================================================================= GALLERY */
 
+/*
+ * Four photographs, not nine cells. On the phone they run full width — this is
+ * the one section whose whole job is to be looked at, and it was previously the
+ * flattest thing on the page.
+ */
 .y01 .gal {
   margin-top: 3rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 0.75rem;
 }
 
@@ -886,8 +925,13 @@
 }
 
 .y01 .plate--wide {
-  grid-column: span 2;
   aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 48rem) {
+  .y01 .plate--wide {
+    grid-column: span 2;
+  }
 }
 
 .y01 .plate--tall {
@@ -941,7 +985,8 @@
 
 @media (min-width: 48rem) {
   .y01 .gal {
-    grid-template-columns: repeat(4, 1fr);
+    /* 2 wide + 2 standing = six cells across three rows, exactly filled. */
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 }
@@ -1273,6 +1318,31 @@
   color: var(--txt-mute);
 }
 
+.y01 .toxic__close {
+  margin-top: 4.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgb(var(--rgb-magenta) / 0.24);
+  text-align: center;
+}
+
+.y01 .toxic__count {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(3rem, 16vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  /* Reserves its line so filling it on mount shifts nothing below. */
+  min-height: 1em;
+}
+
+.y01 .toxic__closeSub {
+  margin-top: 0.75rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+}
+
 .y01 .slate dd {
   margin: 0;
   /* Capped like every other prose block on the page; uncapped it ran to a
@@ -1292,7 +1362,7 @@
   color: var(--txt-mute);
 }
 
-.y01 .colo h2 {
+.y01 .colo h3 {
   font-family: var(--font-disp);
   font-size: 0.6875rem;
   font-weight: 700;
@@ -1319,12 +1389,17 @@
   max-width: 52ch;
 }
 
+/*
+ * Was set in the display stack, so its Kannada fell to a system face while the
+ * hero's identical glyphs got Noto Sans Kannada — and at 0.14 alpha it
+ * measured 1.32:1, the only sub-threshold text on the page.
+ */
 .y01 .colo__mark {
-  font-family: var(--font-disp);
-  font-weight: 800;
+  font-family: var(--font-kn);
+  font-weight: 700;
   font-size: clamp(2.5rem, 12vw, 5rem);
   line-height: 1;
-  color: rgb(var(--rgb-venom) / 0.14);
+  color: rgb(var(--rgb-venom) / 0.38);
 }
 
 @media (min-width: 64rem) {

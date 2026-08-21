@@ -48,7 +48,7 @@ export const originFrieze = [
   {
     id: "debut",
     year: "2007",
-    title: "Jambada Hudugi",
+    title: "The film debut",
     body: "The film debut. One year later Moggina Manasu would win him a Filmfare Award and make the name stick.",
   },
 ] as const;

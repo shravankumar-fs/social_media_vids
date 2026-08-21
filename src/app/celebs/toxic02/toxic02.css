@@ -1,0 +1,1171 @@
+/* ===========================================================================
+   /celebs/toxic02 — TOXIC
+   Mobile-first. Every base rule is the phone; breakpoints only ever add.
+
+   SCOPING CONTRACT: every selector is nested under `.t02`. Next.js does not
+   remove route stylesheets on client navigation, so an unscoped rule here
+   would still be live on /celebs/yash_01 and /celebs/toxic01 and would
+   repaint pages that have their own committed worlds. Never add a bare
+   selector to this file.
+   =========================================================================== */
+
+.t02 {
+  /* --- Ground. Near-black carrying a violet cast, never neutral grey. */
+  --void: #04030a;
+  --ink-950: #070510;
+  --ink-900: #0a0818;
+  --ink-850: #0e0b20;
+  --ink-800: #141033;
+  --line: #241d45;
+  --line-soft: #1a1533;
+
+  /* --- Text. --dim is the floor and measures 5.6:1 on --ink-900. */
+  --txt: #f0ecff;
+  --mid: #b9b2d8;
+  --dim: #8e86ad;
+
+  /* --- Neon. Magenta leads because it is the film's colour; azure is
+         structure; ember belongs to the aura alone. */
+  --magenta: #ff3d92;
+  --magenta-soft: #ff9ac6;
+  --azure: #4cc9ff;
+  --azure-soft: #a8e4ff;
+  --violet: #a855f7;
+  --ember: #ff7a29;
+
+  --rgb-magenta: 255 61 146;
+  --rgb-azure: 76 201 255;
+  --rgb-violet: 168 85 247;
+  --rgb-ember: 255 122 41;
+
+  --font-disp: var(--font-t02-disp), "Helvetica Neue", sans-serif;
+  --font-txt: var(--font-t02-txt), system-ui, sans-serif;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Generous by default. The reference layout is dense; this page is not. */
+  --pad: 1.375rem;
+  --band: 6.5rem;
+  --gap: 1rem;
+
+  /* Written each frame by useScrollPulse. Fallbacks keep the page lit if the
+     script never runs. */
+  --sync: 0.5;
+  --depth: 0;
+
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+  background: var(--void);
+  color: var(--txt);
+  font-family: var(--font-txt);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+@media (min-width: 48rem) {
+  .t02 {
+    --pad: 2.5rem;
+    --band: 9rem;
+    --gap: 1.25rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .t02 {
+    --pad: 4rem;
+    --band: 11.5rem;
+    --gap: 1.5rem;
+  }
+}
+
+/*
+ * globals.css paints <body> the gold route's ground (#0e120c). Any moment this
+ * route's own background is not covering it — overscroll bounce, the frame
+ * before first paint — that green shows through. A fixed backdrop pins this
+ * page's void behind everything instead of relying on the wrapper's box.
+ */
+.t02::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--void);
+  pointer-events: none;
+}
+
+.t02 ::selection {
+  background: var(--magenta);
+  color: var(--void);
+}
+.t02 :focus-visible {
+  outline: 2px solid var(--azure);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.t02 a {
+  color: var(--azure-soft);
+  text-underline-offset: 0.22em;
+  text-decoration-color: rgb(var(--rgb-azure) / 0.45);
+  transition: color 0.3s var(--ease);
+}
+.t02 a:hover {
+  color: var(--azure);
+}
+
+.t02 .shell {
+  width: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+/* Bands carry the page's air. The reference packs sections edge to edge; the
+   whole point of this build is the space between them. */
+.t02 .band {
+  position: relative;
+  padding-block: var(--band);
+}
+
+/* ------------------------------------------------------------------ type */
+
+.t02 .num {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  color: var(--magenta);
+  /* Rides the shared swell so the section markers breathe together. */
+  text-shadow: 0 0 calc(8px + var(--sync) * 14px)
+    rgb(var(--rgb-magenta) / calc(0.35 + var(--sync) * 0.4));
+}
+
+.t02 .num span {
+  color: var(--dim);
+  margin-left: 0.85rem;
+  letter-spacing: 0.22em;
+}
+
+.t02 .h2 {
+  margin-top: 1.1rem;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2rem, 8.5vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.t02 .lede {
+  margin-top: 1.15rem;
+  max-width: 46ch;
+  font-size: 1.0625rem;
+  font-weight: 300;
+  color: var(--mid);
+}
+
+@media (min-width: 64rem) {
+  .t02 .h2 {
+    font-size: clamp(2.8rem, 4vw, 4rem);
+  }
+  .t02 .lede {
+    font-size: 1.125rem;
+  }
+}
+
+/* --------------------------------------------------------------- reveal
+ * One authored motion. The element is legible before any script runs — it is
+ * never hidden — and arriving lifts it and lights it.
+ */
+.t02 .rise {
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease),
+    filter 0.8s var(--ease);
+}
+
+@media (scripting: enabled) {
+  /* Filter and transform only: no opacity. Group opacity would composite every
+     descendant with it, which drags nested micro-labels under the contrast
+     floor for the whole transition. */
+  .t02 .rise:not([data-in]) {
+    transform: translate3d(0, 22px, 0);
+    filter: saturate(0.2) brightness(0.86);
+  }
+}
+
+/* ================================================================== SPIRAL
+ * One arrow for the whole page. Fixed, so it reads as a single continuous
+ * gesture rather than restarting in every section, and drawn entirely by
+ * --depth: at the top of the page nothing is on screen, at the bottom the
+ * curve is complete with the chevron sitting on its tip.
+ */
+.t02 .spiral {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.t02 .spiral svg {
+  width: min(190vw, 62rem);
+  height: auto;
+  /* Faint enough to be atmosphere. It must never compete with the type. */
+  opacity: calc(0.1 + var(--sync) * 0.07);
+  filter: drop-shadow(0 0 14px rgb(var(--rgb-violet) / 0.35));
+}
+
+.t02 .spiral__spin {
+  transform-origin: 300px 300px;
+  /* A slow quarter-turn across the whole scroll, so the tail keeps moving
+     after the line has finished drawing. */
+  transform: rotate(calc(var(--depth, 0) * 96deg));
+}
+
+.t02 .spiral__line {
+  /* pathLength="1" on the element normalises the curve, so this draws it from
+     nothing to complete without anything having to measure it. */
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--depth, 0));
+}
+
+.t02 .spiral__head {
+  offset-distance: calc(var(--depth, 0) * 100%);
+  offset-rotate: auto;
+  opacity: calc(var(--depth, 0) * 1.6);
+}
+
+/* ==================================================================== HERO */
+
+.t02 .hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  isolation: isolate;
+  overflow: hidden;
+  perspective: 1200px;
+  padding-bottom: env(safe-area-inset-bottom);
+  background:
+    radial-gradient(120% 80% at 50% 0%, var(--ink-850) 0%, var(--void) 68%);
+}
+
+/* --- the aura. Fire, not a glow blob.
+ *
+ * Four tongues on different periods and directions, additively blended and
+ * heavily blurred. Because the periods share no common factor they never
+ * re-align, which is what stops it reading as a pulsing lamp and starts it
+ * reading as combustion. All four animate transform only.
+ */
+.t02 .aura {
+  position: absolute;
+  /* Anchored to the figure, not the viewport centre: it is a rim-light behind
+     him, so it belongs where he is. */
+  left: 66%;
+  top: -2%;
+  /*
+   * In front of the portrait, not behind it. The source is a rectangular
+   * photograph rather than a cut-out, so its own background would occlude any
+   * glow placed underneath — nothing would ever be visible. Screen-blended on
+   * top it reads as firelight falling across the frame instead of as a rim
+   * behind the figure. Swap in a transparent PNG and this can move back to
+   * z-index 0 for a true backlight.
+   */
+  z-index: 2;
+  width: min(82vw, 22rem);
+  height: min(112vw, 29rem);
+  translate: -50% 0;
+  pointer-events: none;
+  /* Drifts with the scroll so the fire sits in the scene rather than on the
+     glass in front of it. */
+  transform: translate3d(0, calc(var(--p, 0) * -46px), 0);
+  filter: blur(30px) saturate(1.4);
+  mix-blend-mode: screen;
+  /* Fades out at the edges so the fire has no rectangle. */
+  /* Wider at the base, tapering upward — the silhouette of a flame rather
+     than of a lamp. */
+  mask-image: radial-gradient(58% 66% at 50% 62%, #000 30%, transparent 76%);
+}
+
+.t02 .aura b {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 46% 54% 52% 48% / 58% 42% 58% 42%;
+  will-change: transform;
+}
+
+.t02 .aura b:nth-child(1) {
+  background: radial-gradient(closest-side, rgb(var(--rgb-magenta) / 0.9), transparent 70%);
+  animation: lick-a 7.3s ease-in-out infinite;
+}
+.t02 .aura b:nth-child(2) {
+  background: radial-gradient(closest-side, rgb(var(--rgb-violet) / 0.82), transparent 68%);
+  animation: lick-b 9.1s ease-in-out infinite;
+}
+.t02 .aura b:nth-child(3) {
+  background: radial-gradient(closest-side, rgb(var(--rgb-ember) / 0.85), transparent 58%);
+  animation: lick-c 5.9s ease-in-out infinite;
+}
+.t02 .aura b:nth-child(4) {
+  background: radial-gradient(closest-side, rgb(var(--rgb-azure) / 0.5), transparent 66%);
+  animation: lick-d 11.7s ease-in-out infinite;
+}
+
+@keyframes lick-a {
+  0%, 100% { transform: translate3d(-5%, 10%, 0) scaleY(0.94) scaleX(1.02) rotate(0deg); }
+  35%      { transform: translate3d(4%, -8%, 0) scaleY(1.2) scaleX(0.9) rotate(5deg); }
+  70%      { transform: translate3d(-7%, -2%, 0) scaleY(1.02) scaleX(1.06) rotate(-4deg); }
+}
+@keyframes lick-b {
+  0%, 100% { transform: translate3d(6%, 8%, 0) scaleY(1) scaleX(1.05) rotate(0deg); }
+  45%      { transform: translate3d(-6%, -12%, 0) scaleY(1.24) scaleX(0.88) rotate(-7deg); }
+}
+@keyframes lick-c {
+  0%, 100% { transform: translate3d(0, 16%, 0) scaleY(0.8) scaleX(1.08); }
+  40%      { transform: translate3d(5%, -6%, 0) scaleY(1.26) scaleX(0.86); }
+  75%      { transform: translate3d(-4%, 6%, 0) scaleY(0.96) scaleX(1.02); }
+}
+@keyframes lick-d {
+  0%, 100% { transform: translate3d(-4%, 4%, 0) scaleY(1.1) scaleX(0.96) rotate(0deg); }
+  50%      { transform: translate3d(7%, -10%, 0) scaleY(0.9) scaleX(1.1) rotate(5deg); }
+}
+
+/* With a transparent cut-out the aura belongs behind the figure, so the
+   silhouette is rim-lit rather than washed over from in front. */
+.t02 .hero[data-cutout="true"] .aura {
+  z-index: 0;
+  mix-blend-mode: normal;
+  filter: blur(34px) saturate(1.45);
+}
+
+/*
+ * Anchored to the top-right and bled off both edges, the way the reference
+ * frames him — not centred in the viewport. The inscription owns the
+ * lower-left, and because this is a cut-out the two can overlap without
+ * either becoming unreadable.
+ */
+.t02 .hero__portrait {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  width: min(68vw, 21rem);
+  translate: 10% -1%;
+  /* Interactive: this element carries the spotlight. It was pointer-events:
+     none, which silently stopped the torch from ever firing on the hero. */
+  pointer-events: auto;
+  /* Tilt is tiny on purpose: "minimal 3D", and large rotations on a photo of
+     a real person read as a gimmick. */
+  transform: rotateY(calc(var(--tx, 0) * 3deg))
+    rotateX(calc(var(--ty, 0) * -2deg));
+  transition: transform 0.12s linear;
+}
+
+.t02 .hero__portrait img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  /* A cut-out carries its own silhouette; feathering would eat its edges. */
+  filter: drop-shadow(0 24px 60px rgb(0 0 0 / 0.55));
+  transform: translate3d(0, calc(var(--p, 0) * -34px), 0);
+}
+
+/* The ground the inscription sits on. Without it the type is on a photograph. */
+.t02 .hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(4 3 10 / 0.12) 30%,
+    rgb(4 3 10 / 0.68) 57%,
+    rgb(4 3 10 / 0.93) 78%,
+    rgb(4 3 10 / 0.97) 100%
+  );
+}
+
+.t02 .hero__inner {
+  position: relative;
+  z-index: 4;
+  align-self: end;
+  /* No max-width here: combined with .shell's margin-inline:auto it centred
+     the whole inscription instead of leaving it on the gutter. Measure is
+     capped on the copy itself (.hero__logline) where it belongs. */
+  padding-block: 1.5rem 1.75rem;
+}
+
+.t02 .hero__kicker,
+.t02 .hero__sub,
+.t02 .hero__logline,
+.t02 .hero__meta {
+  text-shadow:
+    0 1px 2px rgb(4 3 10 / 0.9),
+    0 2px 12px rgb(4 3 10 / 0.7);
+}
+
+.t02 .hero__kicker {
+  font-family: var(--font-disp);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--azure);
+}
+
+.t02 .hero__word {
+  margin: 0.7rem 0 0;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(4.25rem, 24vw, 13rem);
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  color: var(--txt);
+  /* The one place the swell is allowed to be obvious. */
+  text-shadow:
+    0 0 2px rgb(var(--rgb-magenta) / 0.9),
+    0 0 calc(18px + var(--sync) * 26px) rgb(var(--rgb-magenta) / calc(0.4 + var(--sync) * 0.35)),
+    0 0 calc(60px + var(--sync) * 50px) rgb(var(--rgb-violet) / calc(0.2 + var(--sync) * 0.25));
+}
+
+.t02 .hero__sub {
+  margin-top: 0.9rem;
+  font-family: var(--font-disp);
+  font-weight: 600;
+  font-size: clamp(0.8rem, 3.4vw, 1.05rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--magenta-soft);
+}
+
+.t02 .hero__logline {
+  margin-top: 1.4rem;
+  max-width: 34ch;
+  font-weight: 300;
+  color: var(--mid);
+}
+
+.t02 .hero__meta {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.t02 .hero__meta b {
+  color: var(--txt);
+  font-weight: 600;
+}
+
+.t02 .hero__cue {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding-bottom: 1.5rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.t02 .hero__cue i {
+  display: block;
+  width: 1.15rem;
+  color: var(--azure);
+  animation: nudge 2.8s var(--ease) infinite;
+}
+.t02 .hero__cue svg { width: 100%; height: auto; display: block; }
+
+@keyframes nudge {
+  0%, 100% { transform: translateY(-2px); opacity: 0.35; }
+  50%      { transform: translateY(3px);  opacity: 1; }
+}
+
+@media (min-width: 48rem) {
+  .t02 .hero__portrait {
+    top: 50%;
+    width: min(52vw, 30rem);
+    translate: 6% -50%;
+  }
+  .t02 .aura {
+    left: 72%;
+    top: 12%;
+    width: min(62vw, 32rem);
+    height: min(78vw, 38rem);
+  }
+}
+
+@media (min-width: 64rem) {
+  .t02 .hero__portrait {
+    width: min(46vw, 36rem);
+    translate: 2% -50%;
+  }
+  .t02 .hero__inner { padding-block: 3rem 5rem; }
+  .t02 .aura {
+    left: 70%;
+    top: 10%;
+    width: min(46vw, 36rem);
+    height: min(62vw, 44rem);
+  }
+}
+
+/* Short phones: the cue was falling below the fold. */
+@media (max-height: 700px) {
+  .t02 .hero__inner { padding-block: 1.5rem 2rem; }
+  .t02 .hero__logline { display: none; }
+}
+
+/* =================================================================== CARDS
+ * The reference's icon-card grid, given room to breathe and a real hover.
+ */
+.t02 .cards {
+  margin-top: 2.75rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap);
+}
+
+@media (min-width: 30rem) {
+  .t02 .cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 64rem) {
+  .t02 .cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+.t02 .card {
+  position: relative;
+  padding: 1.6rem 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(160deg, var(--ink-850), var(--ink-900) 70%);
+  transition:
+    border-color 0.4s var(--ease),
+    transform 0.4s var(--ease),
+    box-shadow 0.4s var(--ease);
+}
+
+.t02 .card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid transparent;
+  background: linear-gradient(
+      140deg,
+      rgb(var(--rgb-azure) / calc(0.16 + var(--sync) * 0.3)),
+      transparent 45%,
+      rgb(var(--rgb-magenta) / calc(0.14 + var(--sync) * 0.26))
+    )
+    border-box;
+  mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.9;
+}
+
+@media (hover: hover) {
+  .t02 .card:hover {
+    transform: translateY(-5px);
+    border-color: rgb(var(--rgb-azure) / 0.62);
+    box-shadow:
+      0 18px 48px -18px rgb(var(--rgb-violet) / 0.7),
+      0 0 0 1px rgb(var(--rgb-azure) / 0.28),
+      0 0 34px -6px rgb(var(--rgb-azure) / 0.4);
+  }
+  .t02 .card:hover .card__ico {
+    color: var(--magenta);
+    filter: drop-shadow(0 0 10px rgb(var(--rgb-magenta) / 0.7));
+  }
+  .t02 .card:hover dd {
+    color: #fff;
+  }
+
+  .t02 .stat:hover {
+    border-color: rgb(var(--rgb-magenta) / 0.5);
+    box-shadow: 0 0 38px -8px rgb(var(--rgb-magenta) / 0.45);
+  }
+  .t02 .stat:hover dt {
+    color: var(--magenta-soft);
+    text-shadow: 0 0 26px rgb(var(--rgb-magenta) / 0.75);
+  }
+
+  .t02 .role:hover {
+    border-color: rgb(var(--rgb-magenta) / 0.6);
+    box-shadow: 0 0 46px -12px rgb(var(--rgb-magenta) / 0.5);
+  }
+}
+
+.t02 .card__ico,
+.t02 .stat dt,
+.t02 .stat,
+.t02 .role {
+  transition:
+    color 0.4s var(--ease),
+    border-color 0.4s var(--ease),
+    box-shadow 0.4s var(--ease),
+    text-shadow 0.4s var(--ease),
+    filter 0.4s var(--ease);
+}
+
+/* Arrival is a flare, not just a fade: an element lights past its resting
+   brightness as it enters, then settles. Same shared swell, so the whole
+   column of cards flares together rather than one at a time. */
+.t02 .card[data-in],
+.t02 .stat[data-in],
+.t02 .role[data-in] {
+  animation: flare 1.1s var(--ease) both;
+}
+
+@keyframes flare {
+  0%   { box-shadow: 0 0 0 0 rgb(var(--rgb-azure) / 0); }
+  45%  { box-shadow: 0 0 40px -6px rgb(var(--rgb-azure) / 0.42); }
+  100% { box-shadow: 0 0 0 0 rgb(var(--rgb-azure) / 0); }
+}
+
+.t02 .card__ico {
+  width: 1.85rem;
+  height: 1.85rem;
+  color: var(--azure);
+  margin-bottom: 1rem;
+}
+.t02 .card__ico svg { width: 100%; height: 100%; display: block; }
+
+.t02 .card dl { margin: 0; }
+
+.t02 .card dt {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.t02 .card dd {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-disp);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--txt);
+}
+
+/* =================================================================== ROLES */
+
+/* Role cards one side, the figure the other — the reference's "latest project"
+   band, rebuilt with room to breathe. */
+.t02 .feature {
+  margin-top: 2.75rem;
+  display: grid;
+  gap: 2.75rem;
+  align-items: center;
+}
+
+@media (min-width: 48rem) {
+  .t02 .feature {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+    gap: 3rem;
+  }
+}
+
+.t02 .roles {
+  display: grid;
+  gap: var(--gap);
+}
+
+.t02 .feature__fig {
+  position: relative;
+  isolation: isolate;
+  justify-self: center;
+  width: min(80vw, 21rem);
+}
+
+@media (min-width: 48rem) {
+  .t02 .feature__fig { width: 100%; }
+}
+
+.t02 .feature__fig img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 20px 50px rgb(0 0 0 / 0.6));
+}
+
+/* Rim-light behind the cut-out, riding the shared swell so it breathes with
+   every other neon surface rather than on its own timer. */
+.t02 .feature__glow {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 46%;
+  width: 86%;
+  height: 76%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--rgb-magenta) / calc(0.3 + var(--sync) * 0.26)),
+    rgb(var(--rgb-violet) / 0.2) 55%,
+    transparent 78%
+  );
+  filter: blur(36px);
+}
+
+.t02 .role {
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 1.6rem;
+  border: 1px solid rgb(var(--rgb-magenta) / 0.28);
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgb(var(--rgb-magenta) / 0.12), transparent 60%),
+    var(--ink-900);
+}
+
+.t02 .role__name {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2rem, 9vw, 2.9rem);
+  line-height: 1;
+  color: var(--magenta-soft);
+  text-shadow: 0 0 calc(14px + var(--sync) * 20px)
+    rgb(var(--rgb-magenta) / calc(0.25 + var(--sync) * 0.3));
+}
+
+.t02 .role__alias {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--magenta);
+}
+
+.t02 .role__note {
+  margin-top: 0.9rem;
+  font-weight: 300;
+  color: var(--mid);
+}
+
+/* =================================================================== SCALE */
+
+.t02 .stats {
+  margin-top: 2.75rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap);
+}
+@media (min-width: 30rem) { .t02 .stats { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 64rem) { .t02 .stats { grid-template-columns: repeat(4, 1fr); } }
+
+.t02 .stat {
+  padding: 1.75rem 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(170deg, var(--ink-850), var(--ink-900));
+  text-align: center;
+}
+
+.t02 .stat dt {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 7vw, 2.2rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--azure);
+  text-shadow: 0 0 calc(12px + var(--sync) * 18px)
+    rgb(var(--rgb-azure) / calc(0.28 + var(--sync) * 0.32));
+}
+
+.t02 .stat dl { margin: 0; }
+
+.t02 .stat .stat__label {
+  margin: 0.7rem 0 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.t02 .stat dd {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--mid);
+}
+
+/* ================================================================ ENSEMBLE */
+
+.t02 .cast {
+  margin-top: 2.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem var(--gap);
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 30rem) { .t02 .cast { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 64rem) { .t02 .cast { grid-template-columns: repeat(5, 1fr); } }
+
+.t02 .cast li { text-align: center; }
+
+.t02 .cast figure { margin: 0; }
+
+.t02 .cast__ring {
+  position: relative;
+  width: min(38vw, 8.5rem);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  padding: 3px;
+  background: conic-gradient(
+    from calc(var(--depth) * 360deg),
+    rgb(var(--rgb-magenta) / 0.85),
+    rgb(var(--rgb-violet) / 0.7),
+    rgb(var(--rgb-azure) / 0.85),
+    rgb(var(--rgb-magenta) / 0.85)
+  );
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+
+.t02 .cast__ring .spot__beam,
+.t02 .cast__ring::after {
+  border-radius: 50%;
+}
+
+.t02 .cast__ring img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  display: block;
+  background: var(--ink-850);
+}
+
+@media (hover: hover) {
+  .t02 .cast li:hover .cast__ring {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 12px 34px -14px rgb(var(--rgb-magenta) / 0.7);
+  }
+}
+
+/* ================================================================ SPOTLIGHT
+ * A torch carried across a photograph.
+ *
+ * One image, plus an overlay that darkens everything the light is NOT on —
+ * the hole in the mask is the beam. That way the resting state is the image at
+ * full strength and the effect costs one extra element, not a second copy of
+ * the file.
+ *
+ * Pointer-only: on the phone this page is built for there is no cursor to
+ * carry a torch with, so touch never sees the dimmed state at all.
+ */
+/*
+ * `:where()` keeps this at zero specificity, so it acts as a default that any
+ * element positioning itself overrides. As a plain `.t02 .spot` it tied with
+ * `.t02 .hero__portrait` and, coming later in the file, silently won — which
+ * dropped the absolutely-positioned hero figure back into grid flow.
+ */
+.t02 :where(.spot) {
+  position: relative;
+}
+
+.t02 .spot__beam {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .t02 .spot__beam {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+    background: rgb(4 3 10 / 0.66);
+    /* Transparent at the cursor, opaque away from it. --mx/--my come from
+       useSpotlight, coalesced to one write a frame. */
+    mask-image: radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      transparent 0,
+      transparent 20%,
+      rgb(0 0 0 / 0.55) 38%,
+      #000 62%
+    );
+  }
+
+  .t02 .spot[data-lit="true"] .spot__beam {
+    opacity: 1;
+  }
+
+  /* A warm rim where the beam lands, so it reads as light rather than as a
+     hole cut in a filter. */
+  .t02 .spot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+    background: radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgb(var(--rgb-magenta) / 0.2) 0,
+      rgb(var(--rgb-violet) / 0.1) 26%,
+      transparent 52%
+    );
+    mix-blend-mode: screen;
+  }
+  .t02 .spot[data-lit="true"]::after {
+    opacity: 1;
+  }
+}
+
+.t02 .cast figcaption span {
+  display: block;
+}
+
+.t02 .cast__actor {
+  margin-top: 0.9rem;
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--txt);
+}
+
+.t02 .cast__role {
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  color: var(--magenta-soft);
+}
+
+.t02 .cast__note {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
+  color: var(--dim);
+}
+
+.t02 .cast__rest {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line-soft);
+  max-width: 60ch;
+  font-size: 0.9375rem;
+  color: var(--mid);
+}
+.t02 .cast__rest b { color: var(--txt); font-weight: 600; }
+
+/* ================================================================ CAMPAIGN */
+
+.t02 .track {
+  margin-top: 2.75rem;
+  display: grid;
+  gap: 0;
+}
+
+.t02 .stop {
+  position: relative;
+  padding: 0 0 2.5rem 2rem;
+  border-left: 1px solid var(--line);
+}
+.t02 .stop:last-child { padding-bottom: 0; border-left-color: transparent; }
+
+.t02 .stop::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 0.4rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-900);
+  border: 2px solid var(--azure);
+  box-shadow: 0 0 calc(8px + var(--sync) * 14px)
+    rgb(var(--rgb-azure) / calc(0.4 + var(--sync) * 0.4));
+}
+.t02 .stop:last-child::before {
+  background: var(--magenta);
+  border-color: var(--magenta);
+  box-shadow: 0 0 calc(12px + var(--sync) * 20px)
+    rgb(var(--rgb-magenta) / calc(0.5 + var(--sync) * 0.4));
+}
+
+.t02 .stop__date {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--azure);
+}
+.t02 .stop:last-child .stop__date { color: var(--magenta); }
+
+.t02 .stop__title {
+  margin-top: 0.3rem;
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--txt);
+}
+
+.t02 .stop__body {
+  margin-top: 0.4rem;
+  max-width: 52ch;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--mid);
+}
+
+.t02 .stop__figure {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid rgb(var(--rgb-magenta) / 0.4);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--magenta-soft);
+}
+
+/* ================================================================= RELEASE */
+
+.t02 .release {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgb(var(--rgb-magenta) / 0.3);
+  margin-top: 2.75rem;
+  padding: clamp(2rem, 7vw, 3.5rem) clamp(1.4rem, 5vw, 3rem);
+  background:
+    radial-gradient(100% 120% at 100% 0%, rgb(var(--rgb-violet) / 0.2), transparent 60%),
+    radial-gradient(90% 110% at 0% 100%, rgb(var(--rgb-magenta) / 0.16), transparent 62%),
+    var(--ink-900);
+  text-align: center;
+}
+
+.t02 .release__count {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(3rem, 17vw, 7.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  min-height: 1em;
+  color: var(--txt);
+  text-shadow:
+    0 0 3px rgb(var(--rgb-magenta) / 0.8),
+    0 0 calc(22px + var(--sync) * 30px) rgb(var(--rgb-magenta) / calc(0.45 + var(--sync) * 0.35));
+}
+
+.t02 .release__sub {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.t02 .release__grid {
+  margin-top: 2.5rem;
+  display: grid;
+  gap: 1.25rem;
+  text-align: left;
+}
+@media (min-width: 48rem) {
+  .t02 .release__grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+}
+
+.t02 .release__grid dt {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.t02 .release__grid dd {
+  margin: 0.4rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--txt);
+}
+
+/* ================================================================ COLOPHON */
+
+.t02 .colo {
+  border-top: 1px solid var(--line-soft);
+  background: var(--ink-950);
+  padding-block: 4rem 5rem;
+  font-size: 0.875rem;
+  color: var(--dim);
+}
+
+.t02 .colo h3 {
+  font-family: var(--font-disp);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 0.8rem;
+}
+
+.t02 .colo__cols {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 64rem) {
+  .t02 .colo__cols { grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+}
+
+.t02 .colo ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+.t02 .colo p { max-width: 54ch; }
+
+/* =========================================================== REDUCED MOTION
+ * Everything resolves to its finished state. Less movement, never less
+ * content — and the fire stops flowing rather than disappearing.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .t02 *,
+  .t02 *::before,
+  .t02 *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .t02 .rise:not([data-in]) {
+    transform: none;
+    filter: none;
+  }
+  .t02 .hero__portrait,
+  .t02 .hero__portrait img,
+  .t02 .arrows i {
+    transform: none;
+  }
+  .t02 .spiral { display: none; }
+  .t02 .card[data-in],
+  .t02 .stat[data-in],
+  .t02 .role[data-in] { animation: none; }
+    .t02 .spot__beam { display: none; }
+  .t02 .hero__cue i { animation: none; opacity: 0.7; }
+}

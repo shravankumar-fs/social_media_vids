@@ -5,6 +5,12 @@
       "name": "social_media_vids",
       "url": "http://localhost:3210",
       "port": 3210
+    },
+    {
+      "name": "next-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }

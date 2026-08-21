@@ -137,10 +137,33 @@ export default function Toxic() {
               <dt>Release</dt>
               <dd>
                 {toxic.releaseDate} — {toxic.releaseNote}
-                {days !== null && days > 0 ? ` ${days} days from today.` : ""}
               </dd>
             </div>
           </dl>
+        </div>
+
+        {/*
+          Peak-end: the most affecting thing this page owns is how close the
+          film is, and it was previously a trailing clause inside a table cell.
+          It ends the section instead.
+        */}
+        <div className="toxic__close lit">
+          <p className="toxic__count n-venom">
+            {days === null
+              ? "\u00A0"
+              : days > 1
+                ? `${days} days`
+                : days === 1
+                  ? "Tomorrow"
+                  : days === 0
+                    ? "Today"
+                    : "In cinemas now"}
+          </p>
+          <p className="toxic__closeSub">
+            {days !== null && days > 0
+              ? `until ${toxic.title} — ${toxic.releaseDate}`
+              : `${toxic.title} — ${toxic.releaseDate}`}
+          </p>
         </div>
       </div>
     </section>

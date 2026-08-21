@@ -53,15 +53,22 @@ export default function Yash01Page() {
       />
       <SmoothScroll />
 
+      {/*
+        Hero and Colophon sit outside <main> on purpose: a <header> or <footer>
+        nested inside <main> is demoted to `generic` per HTML-AAM, so the page
+        was exposing no banner and no contentinfo landmark at all.
+      */}
+      <Hero />
+
       <main>
-        <Hero />
         <Banner />
         <Bio />
         <Films />
         <Gallery />
         <Toxic />
-        <Colophon />
       </main>
+
+      <Colophon />
     </>
   );
 }
